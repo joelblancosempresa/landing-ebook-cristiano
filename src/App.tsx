@@ -37,22 +37,28 @@ function Book3D({ openT = 0 }: { openT?: number }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
-      {/* Page spread underneath — width grows from 100% (closed, exactly
-          hidden behind the cover) to 200% (fully open — each page gets the
-          book's own full width instead of squeezing into half of it) in
-          step with openT, pinned by its RIGHT edge so the spine lines up
-          with the cover's hinge. Left page: "primera página". Right: índice. */}
-      <div style={{
-        position: 'absolute', top: 0, right: 0, width: `${100 + 100 * (openT / OPEN_PEAK)}%`, height: '100%',
-        transform: `translateZ(${half - 1}px)`, display: 'flex',
-      }}>
-        <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-          <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
+      {/* Blank page underneath — always present, same width as the cover
+          so it's exactly hidden behind it at any rotation, never poking
+          out. Covers the crack during the early part of the opening swing. */}
+      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
+
+      {/* Real page spread — fixed at 200% width (each page gets the book's
+          own full width instead of squeezing into half of it), pinned by
+          its RIGHT edge so the spine lines up with the cover's hinge. Only
+          mounted once the cover has swung clear enough that it wouldn't
+          poke out past it — a fixed size that just appears/disappears
+          cleanly, rather than an animated width fighting the cover's own
+          rotation for space. Left page: "primera página". Right: índice. */}
+      {openT / OPEN_PEAK > 0.85 && (
+        <div style={{ position: 'absolute', top: 0, right: 0, width: '200%', height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
+          <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+            <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </div>
+          <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+            <img src={indice} alt="Índice" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </div>
         </div>
-        <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-          <img src={indice} alt="Índice" style={{ width: '100%', height: 'auto', display: 'block' }} />
-        </div>
-      </div>
+      )}
 
       {/* Front cover — hinged flap: portada outside, blank inside */}
       <div
