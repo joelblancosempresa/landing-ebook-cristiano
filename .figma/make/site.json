@@ -1,0 +1,10 @@
+{
+  "description": "Engage with a captivating landing page for a Christian ebook that offers spiritual guidance, featuring a dynamic design and exclusive pricing.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
