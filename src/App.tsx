@@ -111,9 +111,9 @@ const HOW_IT_WORKS_STEPS = [
 
 // Pop-up fact cards shown once the (single, persistent) book closes and settles
 const FACT_CARDS = [
-  { title: '21 días', text: 'Una entrada corta cada día, de principio a fin.' },
-  { title: 'Historia + versículo', text: 'Cada día abre con una anécdota real y un pasaje en su contexto.' },
-  { title: 'Reto del día', text: 'Un paso pequeño y concreto, no un consejo vago.' },
+  { title: '21 historias reales', text: 'Personas de la Biblia que sintieron exactamente lo que sientes tú ahora.' },
+  { title: '21 versículos en contexto', text: 'No para decorar. Para entender qué estaba pasando cuando se escribieron.' },
+  { title: '21 retos concretos', text: 'Una sola cosa por día. Sin overwhelm, sin culpa.' },
 ]
 
 // Day titles flipped through rapidly once the book has "entered" the phone
