@@ -3,6 +3,10 @@ import portada from './assets/portada.png'
 import contraportada from './assets/contraportada.png'
 import canto from './assets/canto.png'
 
+// Google Apps Script "Web app" URL (termina en /exec) — ver apps-script-presave.gs
+// para el código del backend y cómo desplegarlo.
+const PRESAVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBaI_X_uyEGrOrMqQx-_L0ieQZs_szvM8aAFhgMW3brp_rypdvZoAWMD-_BU7LyIjV/exec'
+
 // ─── Real 3D book box: front + back covers, spine, and page edges ──────────
 // Gives the book actual thickness (like the reference video) instead of two
 // flat, zero-depth planes — at ~90° you see the spine/pages, not a sliver.
@@ -174,18 +178,36 @@ function useTilt() {
       const beta = e.beta ?? 0
       setTilt({ x: clamp01((gamma + 30) / 60) * 2 - 1, y: clamp01((beta - 15) / 60) * 2 - 1 })
     }
-    const requestPermission = (DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> }).requestPermission
-    const onFirstTouch = () => {
-      if (typeof requestPermission === 'function') requestPermission().catch(() => {})
-      window.removeEventListener('touchstart', onFirstTouch)
+    // Guarded: some browsers don't expose DeviceOrientationEvent at all, and
+    // referencing it directly would throw and silently break this whole effect.
+    const DOE = typeof DeviceOrientationEvent !== 'undefined'
+      ? (DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> })
+      : null
+    const requestPermission = DOE?.requestPermission
+    const onFirstGesture = () => {
+      if (typeof requestPermission === 'function') {
+        requestPermission()
+          .then(state => { if (state === 'granted') window.addEventListener('deviceorientation', onOrient) })
+          .catch(() => {})
+      }
+      window.removeEventListener('touchstart', onFirstGesture)
+      window.removeEventListener('click', onFirstGesture)
     }
     window.addEventListener('mousemove', onMove)
-    window.addEventListener('deviceorientation', onOrient)
-    window.addEventListener('touchstart', onFirstTouch, { once: true })
+    if (typeof requestPermission === 'function') {
+      // iOS 13+: motion access is gated behind an explicit user gesture —
+      // the listener is only attached once permission comes back granted.
+      window.addEventListener('touchstart', onFirstGesture, { once: true })
+      window.addEventListener('click', onFirstGesture, { once: true })
+    } else {
+      // Android / desktop: no permission gate, works immediately.
+      window.addEventListener('deviceorientation', onOrient)
+    }
     return () => {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('deviceorientation', onOrient)
-      window.removeEventListener('touchstart', onFirstTouch)
+      window.removeEventListener('touchstart', onFirstGesture)
+      window.removeEventListener('click', onFirstGesture)
     }
   }, [])
   return tilt
@@ -207,7 +229,7 @@ function Header() {
         Joel Blanco Sierra
       </span>
       <a
-        href="#comprar"
+        href="#presave"
         style={{
           fontFamily: 'var(--font-sans)', color: '#000', background: '#c9a96e',
           fontSize: '12px', fontWeight: 600, letterSpacing: '0.04em',
@@ -563,8 +585,28 @@ function OfferSection() {
     return () => obs.disconnect()
   }, [])
 
+  const [nombre, setNombre] = useState('')
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+
+  const handleSubmit = async (ev: React.FormEvent) => {
+    ev.preventDefault()
+    setStatus('sending')
+    try {
+      await fetch(PRESAVE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ nombre, email }),
+      })
+      setStatus('sent')
+    } catch {
+      setStatus('error')
+    }
+  }
+
   return (
-    <div ref={ref} style={{ background: '#000', position: 'relative', paddingTop: '24px', paddingBottom: '80px' }}>
+    <div id="presave" ref={ref} style={{ background: '#000', position: 'relative', paddingTop: '24px', paddingBottom: '80px' }}>
       {/* Price card */}
       <div style={{ maxWidth: '620px', margin: '0 auto', padding: '0 24px' }}>
         <div
@@ -603,77 +645,81 @@ function OfferSection() {
               <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
 
-            {/* Price + CTA */}
+            {/* Presave form */}
             <div style={{ flex: '1 1 240px', minWidth: '220px', textAlign: 'left' }}>
             <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '8px' }}>
-              El libro completo
+              Sé el primero en saberlo
             </h2>
-            <div style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 900, lineHeight: 1, margin: '16px 0 4px' }}>
-              9,99 USD
-            </div>
-            <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px', fontWeight: 300, marginBottom: '28px' }}>
-              Ebook digital · Acceso inmediato
+            <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(13px, 1.6vw, 15px)', lineHeight: 1.6, margin: '16px 0 24px' }}>
+              Déjanos tu nombre y correo y te avisamos en cuanto el libro esté disponible.
             </p>
-            <a
-              href="#comprar"
-              style={{
-                display: 'block',
-                background: '#c9a96e',
-                color: '#000',
-                fontFamily: 'var(--font-sans)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                padding: '17px 24px',
-                textDecoration: 'none',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#d4b87a' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#c9a96e' }}
-            >
-              Comprar ahora
-            </a>
 
-            {/* Divider */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '32px 0' }}>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }} />
-              <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.2)', fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', flexShrink: 0 }}>o bien</span>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }} />
-            </div>
-
-            <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(245,240,232,0.55)', fontSize: 'clamp(13px, 1.6vw, 15px)', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '20px' }}>
-              ¿Prefieres ayudarnos a conocerte mejor? Responde unas preguntas rápidas y llévatelo por 1 USD
-            </p>
-            <a
-              href="#formulario"
-              style={{
-                display: 'block',
-                background: 'transparent',
-                color: 'rgba(245,240,232,0.55)',
-                fontFamily: 'var(--font-sans)',
-                fontSize: '12px',
-                fontWeight: 400,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                padding: '15px 24px',
-                textDecoration: 'none',
-                border: '1px solid rgba(255,255,255,0.1)',
-                transition: 'border-color 0.2s, color 0.2s',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.borderColor = 'rgba(201,169,110,0.4)'
-                el.style.color = '#c9a96e'
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.borderColor = 'rgba(255,255,255,0.1)'
-                el.style.color = 'rgba(245,240,232,0.55)'
-              }}
-            >
-              Responder y desbloquear por 1 USD
-            </a>
+            {status === 'sent' ? (
+              <p style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 700 }}>
+                ¡Listo! Te avisaremos en cuanto esté disponible.
+              </p>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <input
+                  type="text"
+                  required
+                  placeholder="Tu nombre"
+                  value={nombre}
+                  onChange={e => setNombre(e.target.value)}
+                  style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: '#f5f0e8',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    padding: '14px 16px',
+                    outline: 'none',
+                  }}
+                />
+                <input
+                  type="email"
+                  required
+                  placeholder="Tu correo"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: '#f5f0e8',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    padding: '14px 16px',
+                    outline: 'none',
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'sending'}
+                  style={{
+                    display: 'block',
+                    background: '#c9a96e',
+                    color: '#000',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    padding: '17px 24px',
+                    border: 'none',
+                    cursor: status === 'sending' ? 'default' : 'pointer',
+                    opacity: status === 'sending' ? 0.6 : 1,
+                    marginTop: '4px',
+                  }}
+                >
+                  {status === 'sending' ? 'Enviando…' : 'Avísame'}
+                </button>
+                {status === 'error' && (
+                  <p style={{ fontFamily: 'var(--font-sans)', color: '#e08080', fontSize: '12px' }}>
+                    No se pudo enviar, inténtalo de nuevo.
+                  </p>
+                )}
+              </form>
+            )}
             </div>
           </div>
         </div>
