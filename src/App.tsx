@@ -3,6 +3,7 @@ import portada from './assets/portada.png'
 import contraportada from './assets/contraportada.png'
 import canto from './assets/canto.png'
 import indice from './assets/indice.png'
+import primeraPagina from './assets/primera-pagina.png'
 
 // Google Apps Script "Web app" URL (termina en /exec) — ver apps-script-presave.gs
 // para el código del backend y cómo desplegarlo.
@@ -33,10 +34,12 @@ function Book3D({ openT = 0 }: { openT?: number }) {
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Page spread underneath — always present, revealed as the cover opens.
-          Left half stays blank; right half shows the índice. */}
+          Left page: "primera página" artwork. Right page: índice. */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div style={{ width: '10%', height: '100%', background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
-        <div style={{ width: '90%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+        <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
+        <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
           <img src={indice} alt="Índice" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
       </div>
@@ -288,7 +291,7 @@ function HeroSection() {
   }
   // Capped well short of fully open (1) — just enough for the cover to swing
   // clear of the índice on the right page, with the left page barely cracked.
-  const OPEN_PEAK = 0.62
+  const OPEN_PEAK = 0.68
   if (progress < OPEN_START) {
     openT = 0
   } else if (progress < ROTATE2_END) {
