@@ -111,9 +111,9 @@ const HOW_IT_WORKS_STEPS = [
 
 // Pop-up fact cards shown once the (single, persistent) book closes and settles
 const FACT_CARDS = [
-  { title: '21 días', text: 'Una entrada corta cada día, de principio a fin.' },
-  { title: 'Historia + versículo', text: 'Cada día abre con una anécdota real y un pasaje en su contexto.' },
-  { title: 'Reto del día', text: 'Un paso pequeño y concreto, no un consejo vago.' },
+  { title: '1 — La Biblia como espejo', text: 'Cada día empieza con alguien que ya estuvo donde estás tú. Su historia te muestra que hay salida.' },
+  { title: '2 — Un versículo que se queda', text: 'No para memorizarlo. Para entender qué estaba pasando cuando se escribió. Eso lo cambia todo.' },
+  { title: '3 — Una conversación real', text: 'Una frase incompleta. Tú pones el final. El día acaba con algo que decirle a Dios, aunque sean cinco palabras.' },
 ]
 
 // Day titles flipped through rapidly once the book has "entered" the phone
@@ -316,7 +316,7 @@ function HeroSection() {
   rotateY += phoneEnterT * 180 // one more half turn as it shrinks off
   // The book shrinks a bit further while the pop-up cards are visible —
   // otherwise it crowds them out, overlapping both side cards at once.
-  const cardsBookShrink = lerp(1, 0.78, cardsOpacity)
+  const cardsBookShrink = lerp(1, 0.68, cardsOpacity)
   const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink
   const bookOpacity = 1 - windowT(progress, lerp(CARDS_GONE, PHONE_ENTER_END, 0.7), PHONE_ENTER_END)
   // The phone is always mounted — never faded in, never popped in — exactly
@@ -462,17 +462,23 @@ function HeroSection() {
         {/* 3 fact-card pop-ups — small accents around the book's edges, not
             covering it; fixed with the book, fade in and grow from small to
             full size only once it settles diagonal */}
-        <div style={{ position: 'absolute', top: '12%', left: 0, right: 0, zIndex: 6, padding: '0 12px', opacity: cardsOpacity }}>
-          <div style={{ position: 'relative', width: 'min(98%, 460px)', height: 'clamp(240px, 44vh, 320px)', margin: '0 auto', transform: `scale(${cardsScale})` }}>
+        <div style={{ position: 'absolute', top: '14%', left: 0, right: 0, zIndex: 6, padding: '0 12px', opacity: cardsOpacity, transform: `scale(${cardsScale})` }}>
+          <h3 style={{
+            fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(15px, 3vw, 19px)', fontWeight: 700,
+            textAlign: 'center', margin: '0 auto 14px', maxWidth: '260px', lineHeight: 1.25,
+          }}>
+            3 pasos para volver a escuchar a Dios
+          </h3>
+          <div style={{ position: 'relative', width: 'min(98%, 460px)', height: 'clamp(280px, 50vh, 360px)', margin: '0 auto' }}>
             {FACT_CARDS.map((card, i) => (
               <div
                 key={card.title}
                 style={{
                   position: 'absolute',
-                  top: `${[0, 34, 68][i]}%`,
+                  top: `${[0, 36, 72][i]}%`,
                   left: i !== 1 ? '0%' : undefined,
                   right: i === 1 ? '0%' : undefined,
-                  width: 'clamp(108px, 34vw, 135px)',
+                  width: 'clamp(126px, 40vw, 160px)',
                   background: '#0a0a0a', border: '1px solid rgba(201,169,110,0.3)', borderRadius: '8px',
                   padding: '10px 12px', textAlign: 'left', boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
                 }}
