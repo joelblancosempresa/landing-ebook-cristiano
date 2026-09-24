@@ -34,8 +34,12 @@ function Book3D({ openT = 0 }: { openT?: number }) {
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Page spread underneath — always present, revealed as the cover opens.
-          Left page: "primera página" artwork. Right page: índice. */}
-      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
+          Twice the book's own width, pinned by its RIGHT edge to the book's
+          right edge, so it grows leftward past the spine as a real open
+          spread would — each page then gets the book's full width instead
+          of squeezing into half of it. Left page: "primera página" artwork.
+          Right page: índice. */}
+      <div style={{ position: 'absolute', top: 0, right: 0, width: '200%', height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
         <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
           <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
@@ -330,7 +334,11 @@ function HeroSection() {
   // The book shrinks a bit further while the pop-up cards are visible —
   // otherwise it crowds them out, overlapping both side cards at once.
   const cardsBookShrink = lerp(1, 0.78, cardsOpacity)
-  const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink
+  // Open, the spread is twice the book's own width (each page gets the full
+  // width instead of squeezing into half of it) — shrink a bit while open so
+  // that doubled spread still fits the screen instead of running off it.
+  const openBookShrink = lerp(1, 0.66, openT / OPEN_PEAK)
+  const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink * openBookShrink
   const bookOpacity = 1 - windowT(progress, lerp(CARDS_GONE, PHONE_ENTER_END, 0.7), PHONE_ENTER_END)
   // The phone is always mounted — never faded in, never popped in — exactly
   // like the other passing text blocks: it's simply there, and scrolling is
