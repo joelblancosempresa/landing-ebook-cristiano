@@ -37,13 +37,15 @@ function Book3D({ openT = 0 }: { openT?: number }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
-      {/* Page spread underneath — always present, revealed as the cover opens.
-          Width grows from 100% (closed — exactly hidden behind the cover, no
-          poking out) to 200% (fully open — each page gets the book's own
-          full width instead of squeezing into half of it) in step with
-          openT, pinned by its RIGHT edge so the spine lines up with the
-          cover's hinge. Left page: "primera página" artwork. Right: índice. */}
-      <div style={{ position: 'absolute', top: 0, right: 0, width: `${100 + 100 * (openT / OPEN_PEAK)}%`, height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
+      {/* Page spread underneath — width grows from 100% (closed, exactly
+          hidden behind the cover) to 200% (fully open — each page gets the
+          book's own full width instead of squeezing into half of it) in
+          step with openT, pinned by its RIGHT edge so the spine lines up
+          with the cover's hinge. Left page: "primera página". Right: índice. */}
+      <div style={{
+        position: 'absolute', top: 0, right: 0, width: `${100 + 100 * (openT / OPEN_PEAK)}%`, height: '100%',
+        transform: `translateZ(${half - 1}px)`, display: 'flex',
+      }}>
         <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
           <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
