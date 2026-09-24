@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import portada from './assets/portada.png'
 import contraportada from './assets/contraportada.png'
 import canto from './assets/canto.png'
+import indice from './assets/indice.png'
 
 // Google Apps Script "Web app" URL (termina en /exec) — ver apps-script-presave.gs
 // para el código del backend y cómo desplegarlo.
@@ -31,8 +32,14 @@ function Book3D({ openT = 0 }: { openT?: number }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
-      {/* Blank page underneath — always present, revealed as the cover opens */}
-      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
+      {/* Page spread underneath — always present, revealed as the cover opens.
+          Left half stays blank; right half shows the índice. */}
+      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
+        <div style={{ width: '50%', height: '100%', background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
+        <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden' }}>
+          <img src={indice} alt="Índice" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+        </div>
+      </div>
 
       {/* Front cover — hinged flap: portada outside, blank inside */}
       <div
