@@ -36,8 +36,8 @@ function Book3D({ openT = 0 }: { openT?: number }) {
           Left half stays blank; right half shows the índice. */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
         <div style={{ width: '10%', height: '100%', background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
-        <div style={{ width: '90%', height: '100%', background: '#f7f0dd', overflow: 'hidden' }}>
-          <img src={indice} alt="Índice" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <div style={{ width: '90%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <img src={indice} alt="Índice" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
       </div>
 
@@ -288,7 +288,7 @@ function HeroSection() {
   }
   // Capped well short of fully open (1) — just enough for the cover to swing
   // clear of the índice on the right page, with the left page barely cracked.
-  const OPEN_PEAK = 0.42
+  const OPEN_PEAK = 0.62
   if (progress < OPEN_START) {
     openT = 0
   } else if (progress < ROTATE2_END) {
