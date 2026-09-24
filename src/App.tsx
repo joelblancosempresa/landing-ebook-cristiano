@@ -20,6 +20,10 @@ const PRESAVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBaI_X_uyEG
 // span instead of drifting off by D/2, which is what caused the gaps.
 const BOOK_DEPTH = 20 // px
 
+// Capped well short of fully open (1) — just enough for the cover to swing
+// clear of the índice on the right page, with the left page barely cracked.
+const OPEN_PEAK = 0.68
+
 // Realistic paper-edge texture: fine page lines + a shading gradient that
 // darkens toward both sides, like light falling across a rounded page block.
 const PAGE_EDGE_BG =
@@ -34,12 +38,12 @@ function Book3D({ openT = 0 }: { openT?: number }) {
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Page spread underneath — always present, revealed as the cover opens.
-          Twice the book's own width, pinned by its RIGHT edge to the book's
-          right edge, so it grows leftward past the spine as a real open
-          spread would — each page then gets the book's full width instead
-          of squeezing into half of it. Left page: "primera página" artwork.
-          Right page: índice. */}
-      <div style={{ position: 'absolute', top: 0, right: 0, width: '200%', height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
+          Width grows from 100% (closed — exactly hidden behind the cover, no
+          poking out) to 200% (fully open — each page gets the book's own
+          full width instead of squeezing into half of it) in step with
+          openT, pinned by its RIGHT edge so the spine lines up with the
+          cover's hinge. Left page: "primera página" artwork. Right: índice. */}
+      <div style={{ position: 'absolute', top: 0, right: 0, width: `${100 + 100 * (openT / OPEN_PEAK)}%`, height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
         <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
           <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
@@ -293,9 +297,6 @@ function HeroSection() {
   } else {
     rotateY = 360
   }
-  // Capped well short of fully open (1) — just enough for the cover to swing
-  // clear of the índice on the right page, with the left page barely cracked.
-  const OPEN_PEAK = 0.68
   if (progress < OPEN_START) {
     openT = 0
   } else if (progress < ROTATE2_END) {
