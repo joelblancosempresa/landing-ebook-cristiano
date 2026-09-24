@@ -86,7 +86,7 @@ const TEXT_BLOCKS = [
   },
   {
     side: 'right' as const,
-    text: 'No estás solo en esto. Elías se sintió completamente solo. David pensó que Dios se había olvidado de él. Los discípulos sintieron que a Dios no le importaba lo que les pasaba. Habacuc gritó y sintió que Dios no respondía. Asaf llegó a preguntarse si Dios había dejado de tener misericordia.',
+    text: 'No estás solo en esto.\nElías pidió morirse después de su mayor victoria.\nDavid llenó los Salmos de preguntas sin respuesta.\nLos discípulos durmieron en Getsemaní.\nHabacuc le preguntó a Dios hasta cuándo iba a ignorarle.\nAsaf pensó que su fe había sido un error.',
   },
   {
     side: 'left' as const,
@@ -236,7 +236,7 @@ function Header() {
           padding: '9px 20px', borderRadius: '999px', textDecoration: 'none',
         }}
       >
-        Consíguelo
+        Quiero el mío
       </a>
     </div>
   )
@@ -314,7 +314,10 @@ function HeroSection() {
   // z-index) the whole time, so the book visibly passes behind/under it.
   const phoneEnterT = windowT(progress, CARDS_GONE, PHONE_ENTER_END)
   rotateY += phoneEnterT * 180 // one more half turn as it shrinks off
-  const bookScale = lerp(1, 0.12, phoneEnterT)
+  // The book shrinks a bit further while the pop-up cards are visible —
+  // otherwise it crowds them out, overlapping both side cards at once.
+  const cardsBookShrink = lerp(1, 0.78, cardsOpacity)
+  const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink
   const bookOpacity = 1 - windowT(progress, lerp(CARDS_GONE, PHONE_ENTER_END, 0.7), PHONE_ENTER_END)
   // The phone is always mounted — never faded in, never popped in — exactly
   // like the other passing text blocks: it's simply there, and scrolling is
@@ -388,7 +391,7 @@ function HeroSection() {
           {TEXT_BLOCKS.map((block) => (
             <p key={block.text} style={{
               fontFamily: 'var(--font-body)', color: 'rgba(245,240,232,0.6)', fontSize: 'clamp(13px, 1.6vw, 15px)',
-              lineHeight: 1.6, fontStyle: 'italic', margin: 0,
+              lineHeight: 1.6, fontStyle: 'italic', margin: 0, whiteSpace: 'pre-line',
             }}>
               {block.text}
             </p>
@@ -402,13 +405,16 @@ function HeroSection() {
       <div style={{ position: 'absolute', top: '220vh', left: 0, right: 0, textAlign: 'center', padding: '0 24px', zIndex: 1 }}>
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.8 }}>
-            ✦ &nbsp; 21 entradas diarias &nbsp; ✦
+            ✦ &nbsp; 21 días &nbsp; ✦
           </div>
           <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(20px, 3.6vw, 30px)', fontWeight: 700, lineHeight: 1.25, margin: '0 auto 12px' }}>
-            Cada página, un paso pequeño de vuelta
+            No tienes que sentir la fe para volver a practicarla.
           </h2>
           <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(12px, 1.5vw, 15px)', fontWeight: 300, maxWidth: '480px', margin: '0 auto', lineHeight: 1.6 }}>
-            Una historia real, un versículo en su contexto y un reto concreto. Sin sermones largos, sin culpa.
+            Un versículo que no habías leído así.<br />
+            Una historia que te va a costar olvidar.<br />
+            Y algo concreto que hacer ese día.<br />
+            Sin sermones. Sin culpa.
           </p>
         </div>
       </div>
@@ -456,7 +462,7 @@ function HeroSection() {
         {/* 3 fact-card pop-ups — small accents around the book's edges, not
             covering it; fixed with the book, fade in and grow from small to
             full size only once it settles diagonal */}
-        <div style={{ position: 'absolute', top: '4%', left: 0, right: 0, zIndex: 6, padding: '0 12px', opacity: cardsOpacity }}>
+        <div style={{ position: 'absolute', top: '12%', left: 0, right: 0, zIndex: 6, padding: '0 12px', opacity: cardsOpacity }}>
           <div style={{ position: 'relative', width: 'min(98%, 460px)', height: 'clamp(240px, 44vh, 320px)', margin: '0 auto', transform: `scale(${cardsScale})` }}>
             {FACT_CARDS.map((card, i) => (
               <div
@@ -648,10 +654,10 @@ function OfferSection() {
             {/* Presave form */}
             <div style={{ flex: '1 1 240px', minWidth: '220px', textAlign: 'left' }}>
             <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '8px' }}>
-              Sé el primero en saberlo
+              Esto no es para todos. Es para quien lo necesita de verdad.
             </h2>
             <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(13px, 1.6vw, 15px)', lineHeight: 1.6, margin: '16px 0 24px' }}>
-              Déjanos tu nombre y correo y te avisamos en cuanto el libro esté disponible.
+              Déjanos tu email. Te avisaremos el día que salga.
             </p>
 
             {status === 'sent' ? (
@@ -711,7 +717,7 @@ function OfferSection() {
                     marginTop: '4px',
                   }}
                 >
-                  {status === 'sending' ? 'Enviando…' : 'Avísame'}
+                  {status === 'sending' ? 'Enviando…' : 'Avísame cuando salga'}
                 </button>
                 {status === 'error' && (
                   <p style={{ fontFamily: 'var(--font-sans)', color: '#e08080', fontSize: '12px' }}>
@@ -781,20 +787,28 @@ function AuthorSection() {
             @joelblancosierra
           </div>
           <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(14px, 1.6vw, 16px)', lineHeight: 1.8, fontStyle: 'italic', maxWidth: '400px', margin: '0 auto' }}>
-            Pastor, escritor y comunicador. Lleva más de una década acompañando a personas que sienten que Dios se ha callado — y ayudándolas a encontrar el camino de regreso a su presencia.
+            Joel Blanco Sierra es un joven emprendedor cristiano de España con una misión clara: llevar el amor de Dios a quien más lo necesita.
           </p>
         </div>
 
         {/* Footer note */}
         <div style={{ marginTop: '48px', fontFamily: 'var(--font-serif)', color: 'rgba(201,169,110,0.4)', fontSize: 'clamp(13px, 1.8vw, 16px)', fontStyle: 'italic' }}>
-          "¿Acaso no has sabido? ¿Acaso no has oído?"
+          "Cercano está el Señor a los quebrantados de corazón."
         </div>
         <div style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.18)', fontSize: '10px', letterSpacing: '0.18em' }}>
-          Isaías 40:28
+          Salmos 34:18
         </div>
         <div style={{ marginTop: '32px', fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.13)', fontSize: '11px', fontWeight: 300 }}>
           © {new Date().getFullYear()} Joel Blanco Sierra · Todos los derechos reservados
         </div>
+        <a
+          href="https://instagram.com/joelblancosierra"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', fontFamily: 'var(--font-sans)', color: 'rgba(201,169,110,0.4)', fontSize: '11px', fontWeight: 300, textDecoration: 'none' }}
+        >
+          @joelblancosierra
+        </a>
       </div>
     </div>
   )
