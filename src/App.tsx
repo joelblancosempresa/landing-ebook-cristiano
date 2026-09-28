@@ -37,25 +37,26 @@ function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
-      {/* Blank page underneath — always present, same width as the cover
-          so it's exactly hidden behind it at any rotation, never poking out. */}
+      {/* Page underneath — always present, same width as the cover so it's
+          exactly hidden behind it at any rotation, never poking out. Carries
+          the real artwork as a background-image from the very start (just a
+          cropped center sliver at this narrow width) so nothing plain/blank
+          is ever visible once the cover cracks open — only once it's safe to
+          widen (see below) does the full, uncropped spread take over. */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div style={{ width: '50%', height: '100%', background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
-        <div style={{ width: '50%', height: '100%', background: '#f7f0dd' }} />
+        <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <div style={{ width: '50%', height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       </div>
 
-      {/* Real page spread — fixed at 200% width (each page gets the book's
-          own full width instead of squeezing into half of it), pinned by its
-          RIGHT edge so the spine lines up with the cover's hinge. The
-          artwork is a background-image ON each page itself (not a nested
-          <img>) so it's baked into the same paint/3D layer as the page —
-          it moves rigidly with it instead of being a separate element the
-          browser has to depth-sort against the cover. Only mounted once the
-          whole-book rotation has settled (showSpread): while that outer
-          rotation still runs *at the same time* as the cover's own hinge
-          rotation, two simultaneous 3D rotations made the browser occlude a
-          wider-than-the-cover element inconsistently. Left: "primera
-          página". Right: índice. */}
+      {/* Full-width page spread — 200% wide (each page gets the book's own
+          full width instead of squeezing into half of it), pinned by its
+          RIGHT edge so the spine lines up with the cover's hinge. Only
+          mounted once the whole-book rotation has settled (showSpread):
+          while that outer rotation still runs *at the same time* as the
+          cover's own hinge rotation, two simultaneous 3D rotations made the
+          browser occlude a wider-than-the-cover element inconsistently. It
+          swaps in on top of the narrow version above once safe. Left:
+          "primera página". Right: índice. */}
       {showSpread && (
         <div style={{ position: 'absolute', top: 0, right: 0, width: '200%', height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
           <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
