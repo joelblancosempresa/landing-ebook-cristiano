@@ -38,15 +38,14 @@ function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Page underneath — always present, same width as the cover so it's
-          exactly hidden behind it at any rotation, never poking out. índice
-          (right) carries its artwork from the very start (just a cropped
-          center sliver at this narrow width) so it's never plain/blank once
-          the cover cracks open. The left half stays plain here — the
-          calendar lives on the cover's own inner face instead (see below)
-          while it's still the front-most rotating surface, so we never
-          double-paint the same image on two overlapping surfaces at once. */}
+          exactly hidden behind it at any rotation, never poking out. Both
+          sides carry their real artwork from the very start (just a cropped
+          center sliver at this narrow width) so nothing plain/blank is ever
+          visible once the cover cracks open — the cover's own inner face
+          stays plain (see below) so this is the only surface that ever
+          paints the calendar, never doubled. */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div style={{ width: '50%', height: '100%', background: '#f7f0dd' }} />
+        <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div style={{ width: '50%', height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       </div>
 
@@ -66,13 +65,14 @@ function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?
         </div>
       )}
 
-      {/* Front cover — hinged flap: portada outside, "primera página" (the
-          calendar) inside. The static left page underneath is mostly hidden
-          behind this flap while it's only cracked open (it barely swings
-          clear of that footprint before OPEN_PEAK) — painting the calendar
-          on the flap's own inner face means it's what the viewer actually
-          sees rotating into view from the very start, and keeps seeing as it
-          rotates back closed, instead of a plain panel. */}
+      {/* Front cover — hinged flap: portada outside, plain inside. The
+          cover's own footprint never lines up exactly with the page
+          underneath it (it's hinged at the spine and swings out, so at no
+          rotation does it cover the exact same area as the flat page/spread
+          behind it) — painting anything but a flat page-matching color on
+          this face always showed through as a mismatched sliver or a
+          doubled image against the real page. Plain keeps it invisible
+          against the page color in every gap it doesn't quite cover. */}
       <div
         style={{
           position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
@@ -83,12 +83,7 @@ function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div
-          style={{
-            position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden',
-            backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center',
-          }}
-        />
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
       </div>
 
       {/* Back cover */}
@@ -96,17 +91,23 @@ function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?
         <img src={contraportada} alt="Contraportada del libro" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
 
-      {/* Spine (left edge) — centered on x:0, spun around its own middle */}
-      <div
-        style={{
-          position: 'absolute', top: 0, left: `${-half}px`, width: `${BOOK_DEPTH}px`, height: '100%',
-          transform: 'rotateY(-90deg)',
-          backfaceVisibility: 'hidden',
-          overflow: 'hidden',
-        }}
-      >
-        <img src={canto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-      </div>
+      {/* Spine (left edge) — centered on x:0, spun around its own middle.
+          That's also exactly the seam of the open spread once it's 200%
+          wide (pinned by its right edge), so the spine would otherwise show
+          up as a stray dark bar between the two open pages — hide it once
+          the full spread has taken over. */}
+      {!showSpread && (
+        <div
+          style={{
+            position: 'absolute', top: 0, left: `${-half}px`, width: `${BOOK_DEPTH}px`, height: '100%',
+            transform: 'rotateY(-90deg)',
+            backfaceVisibility: 'hidden',
+            overflow: 'hidden',
+          }}
+        >
+          <img src={canto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        </div>
+      )}
 
       {/* Page edges (right edge) — real-looking paper stack, centered on x:100% */}
       <div
