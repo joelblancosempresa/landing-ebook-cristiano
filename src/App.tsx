@@ -73,44 +73,52 @@ function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?
           on the flap's own inner face means it's what the viewer actually
           sees rotating into view from the very start, instead of a plain
           panel with just a sliver of the real page peeking out. Once the
-          full-width spread takes over (showSpread), this face goes back to
-          plain so we don't paint the same calendar on two surfaces at once. */}
-      <div
-        style={{
-          position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
-          transformOrigin: '0% 50%',
-          transform: `rotateY(${-openT * 160}deg) translateZ(${half}px)`,
-        }}
-      >
-        <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
-          <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        </div>
+          full-width spread takes over (showSpread), the flap is nearly
+          edge-on at OPEN_PEAK but not quite — left rendered, it shows up as
+          a stray sliver (and gap) right at the spread's seam, so it's
+          hidden entirely once the spread has taken over. */}
+      {!showSpread && (
         <div
           style={{
-            position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden',
-            ...(showSpread
-              ? { background: '#f7f0dd' }
-              : { backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }),
+            position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
+            transformOrigin: '0% 50%',
+            transform: `rotateY(${-openT * 160}deg) translateZ(${half}px)`,
           }}
-        />
-      </div>
+        >
+          <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
+            <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+          <div
+            style={{
+              position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden',
+              backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center',
+            }}
+          />
+        </div>
+      )}
 
       {/* Back cover */}
       <div style={{ position: 'absolute', inset: 0, transform: `rotateY(180deg) translateZ(${half}px)`, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
         <img src={contraportada} alt="Contraportada del libro" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
 
-      {/* Spine (left edge) — centered on x:0, spun around its own middle */}
-      <div
-        style={{
-          position: 'absolute', top: 0, left: `${-half}px`, width: `${BOOK_DEPTH}px`, height: '100%',
-          transform: 'rotateY(-90deg)',
-          backfaceVisibility: 'hidden',
-          overflow: 'hidden',
-        }}
-      >
-        <img src={canto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-      </div>
+      {/* Spine (left edge) — centered on x:0, spun around its own middle.
+          That's also exactly the seam of the open spread once it's 200%
+          wide (pinned by its right edge), so the spine would otherwise show
+          up as a stray dark bar between the two open pages — hide it once
+          the full spread has taken over. */}
+      {!showSpread && (
+        <div
+          style={{
+            position: 'absolute', top: 0, left: `${-half}px`, width: `${BOOK_DEPTH}px`, height: '100%',
+            transform: 'rotateY(-90deg)',
+            backfaceVisibility: 'hidden',
+            overflow: 'hidden',
+          }}
+        >
+          <img src={canto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        </div>
+      )}
 
       {/* Page edges (right edge) — real-looking paper stack, centered on x:100% */}
       <div
