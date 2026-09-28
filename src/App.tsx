@@ -33,7 +33,7 @@ const PAGE_EDGE_BG =
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
 // like an actual page turning, revealing a blank page underneath. 0 = closed
 // (identical to the plain closed box), 1 = swung fully open to the left.
-function Book3D({ openT = 0 }: { openT?: number }) {
+function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?: boolean }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
@@ -45,11 +45,16 @@ function Book3D({ openT = 0 }: { openT?: number }) {
       {/* Real page spread — fixed at 200% width (each page gets the book's
           own full width instead of squeezing into half of it), pinned by
           its RIGHT edge so the spine lines up with the cover's hinge. Only
-          mounted once the cover has swung clear enough that it wouldn't
-          poke out past it — a fixed size that just appears/disappears
-          cleanly, rather than an animated width fighting the cover's own
-          rotation for space. Left page: "primera página". Right: índice. */}
-      {openT / OPEN_PEAK > 0.85 && (
+          mounted once the whole-book rotation has settled (showSpread) —
+          while that outer rotation is still moving *at the same time* as
+          the cover's own hinge, the two simultaneous 3D rotations made the
+          browser occlude this wider-than-the-cover spread inconsistently.
+          Once settled, only the cover's own (single-axis) rotation is left,
+          which reveals/hides it reliably — giving the whole close-back-down
+          stretch as a comfortably wide, dependably-rendered viewing window
+          instead of a few vh right at the peak. Left: "primera página".
+          Right: índice. */}
+      {showSpread && (
         <div style={{ position: 'absolute', top: 0, right: 0, width: '200%', height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
           <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
             <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -540,7 +545,7 @@ function HeroSection() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              <Book3D openT={openT} />
+              <Book3D openT={openT} showSpread={progress >= ROTATE2_END && openT > 0} />
             </div>
           </div>
         </div>
