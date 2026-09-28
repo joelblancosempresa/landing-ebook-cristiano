@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import portada from './assets/portada.png'
 import contraportada from './assets/contraportada.png'
 import canto from './assets/canto.png'
-import indice from './assets/indice.png'
-import primeraPagina from './assets/primera-pagina.png'
 
 // Google Apps Script "Web app" URL (termina en /exec) — ver apps-script-presave.gs
 // para el código del backend y cómo desplegarlo.
@@ -33,37 +31,16 @@ const PAGE_EDGE_BG =
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
 // like an actual page turning, revealing a blank page underneath. 0 = closed
 // (identical to the plain closed box), 1 = swung fully open to the left.
-function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?: boolean }) {
+function Book3D({ openT = 0 }: { openT?: number }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Blank page underneath — always present, same width as the cover
-          so it's exactly hidden behind it at any rotation, never poking
-          out. Covers the crack during the early part of the opening swing. */}
-      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
-
-      {/* Real page spread — fixed at 200% width (each page gets the book's
-          own full width instead of squeezing into half of it), pinned by
-          its RIGHT edge so the spine lines up with the cover's hinge. Only
-          mounted once the whole-book rotation has settled (showSpread) —
-          while that outer rotation is still moving *at the same time* as
-          the cover's own hinge, the two simultaneous 3D rotations made the
-          browser occlude this wider-than-the-cover spread inconsistently.
-          Once settled, only the cover's own (single-axis) rotation is left,
-          which reveals/hides it reliably — giving the whole close-back-down
-          stretch as a comfortably wide, dependably-rendered viewing window
-          instead of a few vh right at the peak. Left: "primera página".
-          Right: índice. */}
-      {showSpread && (
-        <div style={{ position: 'absolute', top: 0, right: 0, width: '200%', height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-          <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-            <img src={primeraPagina} alt="Primera página" style={{ width: '100%', height: 'auto', display: 'block' }} />
-          </div>
-          <div style={{ width: '50%', height: '100%', background: '#f7f0dd', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-            <img src={indice} alt="Índice" style={{ width: '100%', height: 'auto', display: 'block' }} />
-          </div>
-        </div>
-      )}
+          so it's exactly hidden behind it at any rotation, never poking out. */}
+      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
+        <div style={{ width: '50%', height: '100%', background: 'linear-gradient(160deg, #f7f0dd, #ece2c8)' }} />
+        <div style={{ width: '50%', height: '100%', background: '#f7f0dd' }} />
+      </div>
 
       {/* Front cover — hinged flap: portada outside, blank inside */}
       <div
@@ -348,11 +325,7 @@ function HeroSection() {
   // The book shrinks a bit further while the pop-up cards are visible —
   // otherwise it crowds them out, overlapping both side cards at once.
   const cardsBookShrink = lerp(1, 0.78, cardsOpacity)
-  // Open, the spread is twice the book's own width (each page gets the full
-  // width instead of squeezing into half of it) — shrink a bit while open so
-  // that doubled spread still fits the screen instead of running off it.
-  const openBookShrink = lerp(1, 0.66, openT / OPEN_PEAK)
-  const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink * openBookShrink
+  const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink
   const bookOpacity = 1 - windowT(progress, lerp(CARDS_GONE, PHONE_ENTER_END, 0.7), PHONE_ENTER_END)
   // The phone is always mounted — never faded in, never popped in — exactly
   // like the other passing text blocks: it's simply there, and scrolling is
@@ -545,7 +518,7 @@ function HeroSection() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              <Book3D openT={openT} showSpread={progress >= ROTATE2_END && openT > 0} />
+              <Book3D openT={openT} />
             </div>
           </div>
         </div>
