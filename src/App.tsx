@@ -72,7 +72,7 @@ function Book3D({ openT = 0 }: { openT?: number }) {
           surface that ever paints the calendar or índice — fixed here, it
           never jumps to the cover or anywhere else. Left: calendar. Right:
           índice. */}
-      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, ...INDICE_FACE_STYLE, width: '100%' }} />
+      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, ...INDICE_FACE_STYLE, width: '100%', boxShadow: 'inset 18px 0 28px rgba(0,0,0,0.28)' }} />
 
       {/* Front cover — hinged flap: portada outside, plain inside. */}
       <div
@@ -85,7 +85,7 @@ function Book3D({ openT = 0 }: { openT?: number }) {
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', ...CALENDAR_FACE_STYLE, width: '100%' }} />
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', ...CALENDAR_FACE_STYLE, width: '100%', boxShadow: 'inset 18px 0 28px rgba(0,0,0,0.28)' }} />
       </div>
 
       {/* Back cover */}
