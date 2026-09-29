@@ -334,6 +334,13 @@ function HeroSection() {
   const tiltFade = progress < HERO_END ? 1 : 1 - windowT(progress, HERO_END, BACK_END)
   if (progress >= HERO_END) tiltZ = lerp(-7, 0, Math.min(1, windowT(progress, HERO_END, BACK_END) * 1.4))
   tiltZ += tilt.x * 4 * tiltFade
+  // Open-book 3D tilt: active while the book is open, scales with openT so it
+  // fades in/out naturally with the cover. Adds to rotateY (left/right reveals
+  // the spine edge) and rotateX (up/down depth) — the effect the user sees
+  // when tilting the phone on mobile or moving the mouse on desktop.
+  const openTiltFade = openT / OPEN_PEAK
+  const openTiltY = tilt.x * 14 * openTiltFade
+  const openTiltX = -tilt.y * 6 * openTiltFade
 
   // Final diagonal rest, as it closes — eases in and stays (never fades back flat).
   const closeTilt = windowT(progress, CLOSE_TILT_START, CLOSE_END)
@@ -546,7 +553,7 @@ function HeroSection() {
               style={{
                 width: 'clamp(190px, 48vw, 300px)',
                 aspectRatio: '2/3',
-                transform: `scale(${bookScale}) translateX(${openT * 40}%) rotateZ(${tiltZ}deg) rotateX(${tiltX}deg) rotateY(${rotateY}deg)`,
+                transform: `scale(${bookScale}) translateX(${openT * 40}%) rotateZ(${tiltZ}deg) rotateX(${tiltX + openTiltX}deg) rotateY(${rotateY + openTiltY}deg)`,
                 transformStyle: 'preserve-3d',
               }}
             >
