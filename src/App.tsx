@@ -30,6 +30,19 @@ const PAGE_EDGE_BG =
   'linear-gradient(to right, rgba(0,0,0,0.45), transparent 18%, transparent 82%, rgba(0,0,0,0.45)), ' +
   'repeating-linear-gradient(to bottom, #f5eed9 0px, #f5eed9 1px, #e7dcc0 1px, #e7dcc0 1.6px)'
 
+// The calendar page's box (half the book's width, full height) is much
+// narrower than the source photo — `cover` was cropping most of it away,
+// cutting off the "Calendario" title. `contain` shows the whole image
+// instead, letterboxed against the page color. Shared by both the cover's
+// inner face and the page underneath so the crop never visibly changes
+// during the handoff between them (see `settled` below).
+const CALENDAR_FACE_STYLE = {
+  width: '50%', height: '100%',
+  backgroundImage: `url(${primeraPagina})`, backgroundSize: 'contain' as const,
+  backgroundPosition: 'center', backgroundRepeat: 'no-repeat' as const,
+  backgroundColor: '#f7f0dd',
+}
+
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
 // like an actual page turning, revealing a blank page underneath. 0 = closed
 // (identical to the plain closed box), 1 = swung fully open to the left.
@@ -58,13 +71,7 @@ function Book3D({ openT = 0, settled = false }: { openT?: number; settled?: bool
           índice, always (its side of the cover clears the hinge fast
           regardless, so índice was never the problem). */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div
-          style={
-            settled
-              ? { width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-              : { width: '50%', height: '100%', background: '#f7f0dd' }
-          }
-        />
+        <div style={settled ? CALENDAR_FACE_STYLE : { width: '50%', height: '100%', background: '#f7f0dd' }} />
         <div style={{ width: '50%', height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       </div>
 
@@ -87,7 +94,7 @@ function Book3D({ openT = 0, settled = false }: { openT?: number; settled?: bool
             <div style={{ width: '100%', height: '100%', background: '#f7f0dd' }} />
           ) : (
             <>
-              <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+              <div style={CALENDAR_FACE_STYLE} />
               <div style={{ width: '50%', height: '100%', background: '#f7f0dd' }} />
             </>
           )}
