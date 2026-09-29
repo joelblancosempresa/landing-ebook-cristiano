@@ -56,7 +56,7 @@ const INDICE_FACE_STYLE = {
   width: INDICE_WIDTH, height: '100%',
   backgroundImage: `url(${indice})`, backgroundSize: 'contain' as const,
   backgroundPosition: 'center', backgroundRepeat: 'no-repeat' as const,
-  backgroundColor: '#f7f0dd',
+  backgroundColor: '#ffffff',
 }
 
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
