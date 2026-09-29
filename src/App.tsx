@@ -4,6 +4,11 @@ import contraportada from './assets/contraportada.png'
 import canto from './assets/canto.png'
 import indice from './assets/indice.png'
 import primeraPagina from './assets/primera-pagina.png'
+import page1 from './assets/page1.webp'
+import page2 from './assets/page2.webp'
+import page3 from './assets/page3.webp'
+import page4 from './assets/page4.webp'
+import page5 from './assets/page5.webp'
 
 // Google Apps Script "Web app" URL (termina en /exec) — ver apps-script-presave.gs
 // para el código del backend y cómo desplegarlo.
@@ -158,11 +163,11 @@ const FACT_CARDS = [
 
 // Day titles flipped through rapidly once the book has "entered" the phone
 const PAGE_FLIP_ENTRIES = [
-  { day: 1, title: 'Esto también es fe' },
-  { day: 3, title: 'Cuando orar se siente como hablarle a una pared' },
-  { day: 8, title: 'El teléfono que nunca sueltas' },
-  { day: 15, title: 'Deja de esperar a sentir algo' },
-  { day: 21, title: '¿Y ahora, qué?' },
+  { day: 1, title: 'Esto también es fe', img: page1 },
+  { day: 3, title: 'Cuando orar se siente como hablarle a una pared', img: page2 },
+  { day: 8, title: 'El teléfono que nunca sueltas', img: page3 },
+  { day: 15, title: 'Deja de esperar a sentir algo', img: page4 },
+  { day: 21, title: '¿Y ahora, qué?', img: page5 },
 ]
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
@@ -577,41 +582,37 @@ function HeroSection() {
           transform: `translateY(${phoneRise * 100}vh)`,
         }}>
           <div style={{
-            width: 'clamp(220px, 46vw, 280px)', aspectRatio: '9/19.5',
+            width: 'clamp(240px, 50vw, 300px)', aspectRatio: '9/19.5',
             border: '7px solid #1a1a1a', borderRadius: '36px',
             boxShadow: '0 0 0 1px rgba(201,169,110,0.35), 0 30px 80px rgba(0,0,0,0.6)',
-            position: 'relative', overflow: 'hidden', background: '#fff', marginBottom: '32px',
+            position: 'relative', overflow: 'hidden', background: '#f0eae0', marginBottom: '32px',
           }}>
-            <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', width: '50px', height: '6px', borderRadius: '4px', background: '#1a1a1a', zIndex: 1 }} />
-            {/* An actual page — plain white, hinged at the left edge like a book, flipping over rather than just the text changing */}
-            <div style={{ position: 'absolute', inset: '28px 10px 16px', perspective: '500px' }}>
+            <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', width: '50px', height: '6px', borderRadius: '4px', background: '#1a1a1a', zIndex: 10 }} />
+            {/* Page flip — hinged at left edge, image fills the whole phone screen */}
+            <div style={{ position: 'absolute', inset: '20px 0 12px', perspective: '600px' }}>
               <div style={{
                 position: 'absolute', inset: 0, transformOrigin: 'left center',
                 transform: `rotateY(${pageFlipRotateY}deg)`, transformStyle: 'preserve-3d',
               }}>
-                <div style={{
-                  position: 'absolute', inset: 0, borderRadius: '4px', backfaceVisibility: 'hidden',
-                  background: '#fff', boxShadow: 'inset -10px 0 16px -14px rgba(0,0,0,0.15)',
-                  padding: '20px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'left',
-                }}>
-                  <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '8px', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '8px' }}>
-                    Día {PAGE_FLIP_ENTRIES[pageIndex].day}
-                  </div>
-                  <div style={{ fontFamily: 'var(--font-serif)', color: '#1a1a1a', fontSize: '13px', fontWeight: 700, lineHeight: 1.4 }}>
-                    {PAGE_FLIP_ENTRIES[pageIndex].title}
-                  </div>
+                {/* Front face — the page image */}
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', boxShadow: 'inset -8px 0 12px -10px rgba(0,0,0,0.2)' }}>
+                  <img
+                    src={PAGE_FLIP_ENTRIES[pageIndex].img}
+                    alt={PAGE_FLIP_ENTRIES[pageIndex].title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
                 </div>
-                {/* Back of the page, seen briefly mid-flip */}
+                {/* Back face — brief glimpse mid-flip */}
                 <div style={{
-                  position: 'absolute', inset: 0, borderRadius: '4px', backfaceVisibility: 'hidden',
-                  transform: 'rotateY(180deg)', background: '#f4f4f4',
-                  boxShadow: 'inset 10px 0 16px -14px rgba(0,0,0,0.15)',
+                  position: 'absolute', inset: 0, backfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)', background: '#e8e0d4',
+                  boxShadow: 'inset 8px 0 12px -10px rgba(0,0,0,0.2)',
                 }} />
               </div>
-              {/* Static stack of pages underneath, so it reads as a book mid-flip, not a single floating card */}
-              <div style={{ position: 'absolute', inset: 0, borderRadius: '4px', background: '#eee', zIndex: -1, transform: 'translate(2px, 2px)' }} />
+              {/* Stack of pages underneath */}
+              <div style={{ position: 'absolute', inset: 0, background: '#ddd6cc', zIndex: -1, transform: 'translate(2px, 2px)' }} />
             </div>
-            <div style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', width: '70px', height: '3px', borderRadius: '2px', background: '#1a1a1a' }} />
+            <div style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', width: '70px', height: '3px', borderRadius: '2px', background: '#1a1a1a', zIndex: 10 }} />
           </div>
 
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.8 }}>
