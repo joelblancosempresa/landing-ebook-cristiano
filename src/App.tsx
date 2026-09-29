@@ -72,10 +72,7 @@ function Book3D({ openT = 0 }: { openT?: number }) {
           surface that ever paints the calendar or índice — fixed here, it
           never jumps to the cover or anywhere else. Left: calendar. Right:
           índice. */}
-      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div style={CALENDAR_FACE_STYLE} />
-        <div style={INDICE_FACE_STYLE} />
-      </div>
+      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, ...INDICE_FACE_STYLE, width: '100%' }} />
 
       {/* Front cover — hinged flap: portada outside, plain inside. */}
       <div
@@ -88,7 +85,12 @@ function Book3D({ openT = 0 }: { openT?: number }) {
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
+        {/* Inner face: rotateY(180deg) mirrors DOM order — first child → visual RIGHT, second child → visual LEFT.
+            So blank goes first (visual right) and calendar goes second (visual left). */}
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', display: 'flex' }}>
+          <div style={{ width: INDICE_WIDTH, height: '100%', background: '#f7f0dd' }} />
+          <div style={CALENDAR_FACE_STYLE} />
+        </div>
       </div>
 
       {/* Back cover */}
