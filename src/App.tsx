@@ -849,8 +849,14 @@ function AuthorSection() {
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '12px', fontWeight: 300, letterSpacing: '0.12em', marginBottom: '16px' }}>
             @joelblancosierra
           </div>
-          <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(14px, 1.6vw, 16px)', lineHeight: 1.8, fontStyle: 'italic', maxWidth: '400px', margin: '0 auto' }}>
-            Joel Blanco Sierra es un joven emprendedor cristiano de España con una misión clara: llevar el amor de Dios a quien más lo necesita.
+          <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(245,240,232,0.55)', fontSize: 'clamp(14px, 1.5vw, 16px)', lineHeight: 1.9, fontStyle: 'italic', maxWidth: '480px', margin: '0 auto', textAlign: 'left' }}>
+            Escribí este libro para ti.<br /><br />
+            Para el que extraña a Dios. Para el que lo siente lejos sin entender por qué. Para el que un día tuvo una fe que lo movía todo y ya no sabe dónde se fue. Para el que ora, pero siente que sus palabras no llegan a ningún lado. Para el que abre la Biblia y la cierra sin haber encontrado nada. Para el que sigue creyendo, pero lleva demasiado tiempo sin escucharle de verdad.<br /><br />
+            Porque a veces no es que te hayas alejado. Es que la vida fue ocupando el espacio que antes era suyo. El trabajo, las preocupaciones, el ruido. Y un día te das cuenta de que hace meses que no le hablas como antes.<br /><br />
+            Yo también lo viví. Y porque sé lo que se siente, escribí este libro. Para que puedas volver a escuchar a Dios. Para que vuelvas a reconocer su voz.
+          </p>
+          <p style={{ fontFamily: 'var(--font-serif)', color: 'rgba(201,169,110,0.7)', fontSize: 'clamp(14px, 1.5vw, 16px)', marginTop: '24px', fontStyle: 'italic' }}>
+            — Joel
           </p>
         </div>
 
