@@ -4,6 +4,7 @@ import contraportada from './assets/contraportada.png'
 import canto from './assets/canto.png'
 import indice from './assets/indice.png'
 import primeraPagina from './assets/primera-pagina.png'
+import authorPhoto from './assets/author.webp'
 import page1 from './assets/page1.webp'
 import page2 from './assets/page2.webp'
 import page3 from './assets/page3.webp'
@@ -822,15 +823,15 @@ function AuthorSection() {
           }}
         >
           <img
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&auto=format"
+            src={authorPhoto}
             alt="Joel Blanco Sierra"
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </div>
 
         <div>
-          <div style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 2.5vw, 22px)', fontWeight: 700, marginBottom: '4px' }}>
-            Joel Blanco Sierra
+          <div style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(16px, 2.2vw, 20px)', fontWeight: 700, marginBottom: '4px', fontStyle: 'italic' }}>
+            Cuando Dios se siente lejos
           </div>
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '12px', fontWeight: 300, letterSpacing: '0.12em', marginBottom: '16px' }}>
             @joelblancosierra
