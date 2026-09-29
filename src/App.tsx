@@ -85,12 +85,7 @@ function Book3D({ openT = 0 }: { openT?: number }) {
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        {/* Inner face: rotateY(180deg) mirrors DOM order — first child → visual RIGHT, second child → visual LEFT.
-            So blank goes first (visual right) and calendar goes second (visual left). */}
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', display: 'flex' }}>
-          <div style={{ width: INDICE_WIDTH, height: '100%', background: '#f7f0dd' }} />
-          <div style={CALENDAR_FACE_STYLE} />
-        </div>
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', ...CALENDAR_FACE_STYLE, width: '100%' }} />
       </div>
 
       {/* Back cover */}
