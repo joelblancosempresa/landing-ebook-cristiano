@@ -33,81 +33,49 @@ const PAGE_EDGE_BG =
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
 // like an actual page turning, revealing a blank page underneath. 0 = closed
 // (identical to the plain closed box), 1 = swung fully open to the left.
-function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?: boolean }) {
+function Book3D({ openT = 0 }: { openT?: number }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Page underneath — always present, same width as the cover so it's
-          exactly hidden behind it at any rotation, never poking out. Both
-          sides carry their real artwork from the very start (just a cropped
-          center sliver at this narrow width) so nothing plain/blank is ever
-          visible once the cover cracks open — the cover's own inner face
-          stays plain (see below) so this is the only surface that ever
-          paints the calendar, never doubled. */}
+          exactly hidden behind it at any rotation, never poking out, and
+          the book never changes size when it opens. Left: "primera
+          página" (the calendar). Right: índice. */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
         <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div style={{ width: '50%', height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       </div>
 
-      {/* Full-width page spread — 200% wide (each page gets the book's own
-          full width instead of squeezing into half of it), pinned by its
-          RIGHT edge so the spine lines up with the cover's hinge. Only
-          mounted once the whole-book rotation has settled (showSpread):
-          while that outer rotation still runs *at the same time* as the
-          cover's own hinge rotation, two simultaneous 3D rotations made the
-          browser occlude a wider-than-the-cover element inconsistently. It
-          swaps in on top of the narrow version above once safe. Left:
-          "primera página". Right: índice. */}
-      {showSpread && (
-        <div style={{ position: 'absolute', top: 0, right: 0, width: '200%', height: '100%', transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-          <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-          <div style={{ width: '50%', height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      {/* Front cover — hinged flap: portada outside, plain inside. */}
+      <div
+        style={{
+          position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
+          transformOrigin: '0% 50%',
+          transform: `rotateY(${-openT * 160}deg) translateZ(${half}px)`,
+        }}
+      >
+        <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
+          <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-      )}
-
-      {/* Front cover — hinged flap: portada outside, plain inside. Once the
-          full-width spread has taken over (showSpread), the cover is nearly
-          — but never exactly — edge-on, so leaving it rendered shows up as
-          a third page-like panel sandwiched between the calendar and
-          índice. Hidden entirely for that stretch; it reappears already
-          closed right as the spread itself unmounts. */}
-      {!showSpread && (
-        <div
-          style={{
-            position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
-            transformOrigin: '0% 50%',
-            transform: `rotateY(${-openT * 160}deg) translateZ(${half}px)`,
-          }}
-        >
-          <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
-            <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          </div>
-          <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
-        </div>
-      )}
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
+      </div>
 
       {/* Back cover */}
       <div style={{ position: 'absolute', inset: 0, transform: `rotateY(180deg) translateZ(${half}px)`, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
         <img src={contraportada} alt="Contraportada del libro" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
 
-      {/* Spine (left edge) — centered on x:0, spun around its own middle.
-          That's also exactly the seam of the open spread once it's 200%
-          wide (pinned by its right edge), so the spine would otherwise show
-          up as a stray dark bar between the two open pages — hide it once
-          the full spread has taken over. */}
-      {!showSpread && (
-        <div
-          style={{
-            position: 'absolute', top: 0, left: `${-half}px`, width: `${BOOK_DEPTH}px`, height: '100%',
-            transform: 'rotateY(-90deg)',
-            backfaceVisibility: 'hidden',
-            overflow: 'hidden',
-          }}
-        >
-          <img src={canto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        </div>
-      )}
+      {/* Spine (left edge) — centered on x:0, spun around its own middle */}
+      <div
+        style={{
+          position: 'absolute', top: 0, left: `${-half}px`, width: `${BOOK_DEPTH}px`, height: '100%',
+          transform: 'rotateY(-90deg)',
+          backfaceVisibility: 'hidden',
+          overflow: 'hidden',
+        }}
+      >
+        <img src={canto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      </div>
 
       {/* Page edges (right edge) — real-looking paper stack, centered on x:100% */}
       <div
@@ -361,11 +329,7 @@ function HeroSection() {
   // The book shrinks a bit further while the pop-up cards are visible —
   // otherwise it crowds them out, overlapping both side cards at once.
   const cardsBookShrink = lerp(1, 0.78, cardsOpacity)
-  // Open, the spread is twice the book's own width (each page gets the full
-  // width instead of squeezing into half of it) — shrink a bit while open so
-  // that doubled spread still fits the screen instead of running off it.
-  const openBookShrink = lerp(1, 0.66, openT / OPEN_PEAK)
-  const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink * openBookShrink
+  const bookScale = lerp(1, 0.12, phoneEnterT) * cardsBookShrink
   const bookOpacity = 1 - windowT(progress, lerp(CARDS_GONE, PHONE_ENTER_END, 0.7), PHONE_ENTER_END)
   // The phone is always mounted — never faded in, never popped in — exactly
   // like the other passing text blocks: it's simply there, and scrolling is
@@ -558,7 +522,7 @@ function HeroSection() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              <Book3D openT={openT} showSpread={progress >= ROTATE2_END && openT > 0} />
+              <Book3D openT={openT} />
             </div>
           </div>
         </div>
