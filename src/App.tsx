@@ -393,8 +393,8 @@ function HeroSection() {
   const pageFloat = Math.min(pageFlipT * PAGE_FLIP_ENTRIES.length, PAGE_FLIP_ENTRIES.length - 1)
   const pageBase = Math.floor(pageFloat)
   const pageLocalT = pageFloat - pageBase
-  const pageFlipRotateY = pageLocalT < 0.5 ? lerp(0, -100, pageLocalT * 2) : lerp(100, 0, (pageLocalT - 0.5) * 2)
-  const pageIndex = Math.min(PAGE_FLIP_ENTRIES.length - 1, pageLocalT < 0.5 ? pageBase : pageBase + 1)
+  // One-way flip: current page rotates 0 → -180, revealing next page underneath
+  const pageFlipRotateY = lerp(0, -180, pageLocalT)
   const nextPageIndex = Math.min(PAGE_FLIP_ENTRIES.length - 1, pageBase + 1)
 
   return (
@@ -583,45 +583,39 @@ function HeroSection() {
           transform: `translateY(${phoneRise * 100}vh)`,
         }}>
           <div style={{
-            width: 'clamp(240px, 50vw, 300px)', aspectRatio: '9/19.5',
-            border: '7px solid #1a1a1a', borderRadius: '36px',
+            width: 'clamp(200px, 44vw, 260px)', aspectRatio: '1414/2000',
+            border: '7px solid #1a1a1a', borderRadius: '24px',
             boxShadow: '0 0 0 1px rgba(201,169,110,0.35), 0 30px 80px rgba(0,0,0,0.6)',
             position: 'relative', overflow: 'hidden', background: '#ede6da', marginBottom: '32px',
           }}>
-            <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', width: '50px', height: '6px', borderRadius: '4px', background: '#1a1a1a', zIndex: 10 }} />
-            {/* Page flip — hinged at left edge */}
-            <div style={{ position: 'absolute', inset: '20px 0 12px', perspective: '600px' }}>
+            <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', width: '40px', height: '5px', borderRadius: '3px', background: '#1a1a1a', zIndex: 10 }} />
+            {/* Page content — next page always underneath, current page flips over it */}
+            <div style={{ position: 'absolute', inset: '18px 0 10px', perspective: '800px' }}>
+              {/* Next page — always visible underneath, revealed as current page flips */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#ede6da' }}>
+                <img
+                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
+                  alt=""
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {/* Current page — flips from 0° to -180° like turning a book page */}
               <div style={{
                 position: 'absolute', inset: 0, transformOrigin: 'left center',
                 transform: `rotateY(${pageFlipRotateY}deg)`, transformStyle: 'preserve-3d',
               }}>
-                {/* Front face — current page, contained so whole design is visible */}
-                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset -8px 0 12px -10px rgba(0,0,0,0.2)' }}>
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset -6px 0 10px -6px rgba(0,0,0,0.3)' }}>
                   <img
-                    src={PAGE_FLIP_ENTRIES[pageIndex].img}
-                    alt={PAGE_FLIP_ENTRIES[pageIndex].title}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                    src={PAGE_FLIP_ENTRIES[pageBase].img}
+                    alt={PAGE_FLIP_ENTRIES[pageBase].title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   />
                 </div>
-                {/* Back face — next page (scaleX corrects the mirror from rotateY 180) */}
-                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset 8px 0 12px -10px rgba(0,0,0,0.2)' }}>
-                  <img
-                    src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
-                    alt=""
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scaleX(-1)' }}
-                  />
-                </div>
-              </div>
-              {/* Next page always visible underneath the flipping page */}
-              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#ede6da', zIndex: -1, transform: 'translate(1px, 1px)' }}>
-                <img
-                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-                />
+                {/* Back — cream paper color, briefly visible at 90° edge */}
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', background: '#e8e0d2' }} />
               </div>
             </div>
-            <div style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', width: '70px', height: '3px', borderRadius: '2px', background: '#1a1a1a', zIndex: 10 }} />
+            <div style={{ position: 'absolute', bottom: '6px', left: '50%', transform: 'translateX(-50%)', width: '55px', height: '3px', borderRadius: '2px', background: '#1a1a1a', zIndex: 10 }} />
           </div>
 
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.8 }}>
