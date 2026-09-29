@@ -395,6 +395,7 @@ function HeroSection() {
   const pageLocalT = pageFloat - pageBase
   const pageFlipRotateY = pageLocalT < 0.5 ? lerp(0, -100, pageLocalT * 2) : lerp(100, 0, (pageLocalT - 0.5) * 2)
   const pageIndex = Math.min(PAGE_FLIP_ENTRIES.length - 1, pageLocalT < 0.5 ? pageBase : pageBase + 1)
+  const nextPageIndex = Math.min(PAGE_FLIP_ENTRIES.length - 1, pageBase + 1)
 
   return (
     <div ref={wrapperRef} style={{ height: `${WRAPPER_ACTIVE_VH + 100}vh`, position: 'relative', background: '#000' }}>
@@ -585,32 +586,40 @@ function HeroSection() {
             width: 'clamp(240px, 50vw, 300px)', aspectRatio: '9/19.5',
             border: '7px solid #1a1a1a', borderRadius: '36px',
             boxShadow: '0 0 0 1px rgba(201,169,110,0.35), 0 30px 80px rgba(0,0,0,0.6)',
-            position: 'relative', overflow: 'hidden', background: '#f0eae0', marginBottom: '32px',
+            position: 'relative', overflow: 'hidden', background: '#ede6da', marginBottom: '32px',
           }}>
             <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', width: '50px', height: '6px', borderRadius: '4px', background: '#1a1a1a', zIndex: 10 }} />
-            {/* Page flip — hinged at left edge, image fills the whole phone screen */}
+            {/* Page flip — hinged at left edge */}
             <div style={{ position: 'absolute', inset: '20px 0 12px', perspective: '600px' }}>
               <div style={{
                 position: 'absolute', inset: 0, transformOrigin: 'left center',
                 transform: `rotateY(${pageFlipRotateY}deg)`, transformStyle: 'preserve-3d',
               }}>
-                {/* Front face — the page image */}
-                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', boxShadow: 'inset -8px 0 12px -10px rgba(0,0,0,0.2)' }}>
+                {/* Front face — current page, contained so whole design is visible */}
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset -8px 0 12px -10px rgba(0,0,0,0.2)' }}>
                   <img
                     src={PAGE_FLIP_ENTRIES[pageIndex].img}
                     alt={PAGE_FLIP_ENTRIES[pageIndex].title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
                   />
                 </div>
-                {/* Back face — brief glimpse mid-flip */}
-                <div style={{
-                  position: 'absolute', inset: 0, backfaceVisibility: 'hidden',
-                  transform: 'rotateY(180deg)', background: '#e8e0d4',
-                  boxShadow: 'inset 8px 0 12px -10px rgba(0,0,0,0.2)',
-                }} />
+                {/* Back face — next page (scaleX corrects the mirror from rotateY 180) */}
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset 8px 0 12px -10px rgba(0,0,0,0.2)' }}>
+                  <img
+                    src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
+                    alt=""
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scaleX(-1)' }}
+                  />
+                </div>
               </div>
-              {/* Stack of pages underneath */}
-              <div style={{ position: 'absolute', inset: 0, background: '#ddd6cc', zIndex: -1, transform: 'translate(2px, 2px)' }} />
+              {/* Next page always visible underneath the flipping page */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#ede6da', zIndex: -1, transform: 'translate(1px, 1px)' }}>
+                <img
+                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
+                  alt=""
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                />
+              </div>
             </div>
             <div style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', width: '70px', height: '3px', borderRadius: '2px', background: '#1a1a1a', zIndex: 10 }} />
           </div>
