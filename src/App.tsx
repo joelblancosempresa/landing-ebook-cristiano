@@ -184,7 +184,7 @@ const windowT = (p: number, start: number, end: number) => clamp01((p - start) /
 // holding phases (where there's text to read with the book stopped) are given
 // more scroll distance on purpose, so reaching that checkpoint takes deliberate
 // scrolling.
-const WRAPPER_ACTIVE_VH = 460
+const WRAPPER_ACTIVE_VH = 580
 const HERO_END = 10 / WRAPPER_ACTIVE_VH     // static tilted beat at the very top
 const BACK_END = 65 / WRAPPER_ACTIVE_VH     // rotate 0→180 (front→back) finishes here — fast
 // No static hold here: the moment the back cover is reached, the book is
@@ -207,7 +207,7 @@ const CLOSE_END = 240 / WRAPPER_ACTIVE_VH        // fully closed and settled at 
 const CARDS_SHRINK_START = 272 / WRAPPER_ACTIVE_VH
 const CARDS_GONE = 297 / WRAPPER_ACTIVE_VH
 const PHONE_ENTER_END = 375 / WRAPPER_ACTIVE_VH  // book fully shrunk away, phone fully revealed
-const PAGE_FLIP_END = 440 / WRAPPER_ACTIVE_VH    // rapid page-flipping runs from PHONE_ENTER_END to here
+const PAGE_FLIP_END = 560 / WRAPPER_ACTIVE_VH    // page-flipping runs from PHONE_ENTER_END to here
 
 // Subtle interactive parallax — mouse on desktop, device tilt on mobile.
 // iOS 13+ only grants motion access after a user gesture, so we request it
@@ -393,8 +393,8 @@ function HeroSection() {
   const pageFloat = Math.min(pageFlipT * PAGE_FLIP_ENTRIES.length, PAGE_FLIP_ENTRIES.length - 1)
   const pageBase = Math.floor(pageFloat)
   const pageLocalT = pageFloat - pageBase
-  // One-way flip: current page rotates 0 → -180, revealing next page underneath
-  const pageFlipRotateY = lerp(0, -180, pageLocalT)
+  // Horizontal slide: current page slides left, next comes from right simultaneously
+  const slidePercent = pageLocalT * 100
   const nextPageIndex = Math.min(PAGE_FLIP_ENTRIES.length - 1, pageBase + 1)
 
   return (
@@ -588,31 +588,29 @@ function HeroSection() {
             boxShadow: '0 0 0 1px rgba(201,169,110,0.35), 0 30px 80px rgba(0,0,0,0.6)',
             position: 'relative', overflow: 'hidden', background: '#ede6da', marginBottom: '32px',
           }}>
-            <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', width: '40px', height: '5px', borderRadius: '3px', background: '#1a1a1a', zIndex: 10 }} />
-            {/* Page content — next page always underneath, current page flips over it */}
-            <div style={{ position: 'absolute', inset: '18px 0 10px', perspective: '800px' }}>
-              {/* Next page — always visible underneath, revealed as current page flips */}
-              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#ede6da' }}>
+            {/* Top bar — book subtitle instead of a blank notch */}
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '22px', background: '#ede6da', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: 'var(--font-serif)', fontSize: '7px', color: '#888', letterSpacing: '0.08em', fontStyle: 'italic' }}>
+                ¿Sientes a Dios lejos?
+              </span>
+            </div>
+            {/* Slide page transition: current slides left, next comes from right */}
+            <div style={{ position: 'absolute', inset: '22px 0 0', overflow: 'hidden' }}>
+              {/* Outgoing page */}
+              <div style={{ position: 'absolute', inset: 0, transform: `translateX(${-slidePercent}%)`, overflow: 'hidden', background: '#ede6da' }}>
                 <img
-                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
-                  alt=""
+                  src={PAGE_FLIP_ENTRIES[pageBase].img}
+                  alt={PAGE_FLIP_ENTRIES[pageBase].title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
-              {/* Current page — flips from 0° to -180° like turning a book page */}
-              <div style={{
-                position: 'absolute', inset: 0, transformOrigin: 'left center',
-                transform: `rotateY(${pageFlipRotateY}deg)`, transformStyle: 'preserve-3d',
-              }}>
-                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset -6px 0 10px -6px rgba(0,0,0,0.3)' }}>
-                  <img
-                    src={PAGE_FLIP_ENTRIES[pageBase].img}
-                    alt={PAGE_FLIP_ENTRIES[pageBase].title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                  />
-                </div>
-                {/* Back — cream paper color, briefly visible at 90° edge */}
-                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', background: '#e8e0d2' }} />
+              {/* Incoming page */}
+              <div style={{ position: 'absolute', inset: 0, transform: `translateX(${100 - slidePercent}%)`, overflow: 'hidden', background: '#ede6da' }}>
+                <img
+                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
+                  alt={PAGE_FLIP_ENTRIES[nextPageIndex].title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
               </div>
             </div>
             <div style={{ position: 'absolute', bottom: '6px', left: '50%', transform: 'translateX(-50%)', width: '55px', height: '3px', borderRadius: '2px', background: '#1a1a1a', zIndex: 10 }} />
