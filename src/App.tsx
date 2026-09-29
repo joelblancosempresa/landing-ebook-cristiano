@@ -185,7 +185,7 @@ const windowT = (p: number, start: number, end: number) => clamp01((p - start) /
 // holding phases (where there's text to read with the book stopped) are given
 // more scroll distance on purpose, so reaching that checkpoint takes deliberate
 // scrolling.
-const WRAPPER_ACTIVE_VH = 580
+const WRAPPER_ACTIVE_VH = 465
 const HERO_END = 10 / WRAPPER_ACTIVE_VH     // static tilted beat at the very top
 const BACK_END = 65 / WRAPPER_ACTIVE_VH     // rotate 0→180 (front→back) finishes here — fast
 // No static hold here: the moment the back cover is reached, the book is
@@ -208,7 +208,7 @@ const CLOSE_END = 240 / WRAPPER_ACTIVE_VH        // fully closed and settled at 
 const CARDS_SHRINK_START = 272 / WRAPPER_ACTIVE_VH
 const CARDS_GONE = 297 / WRAPPER_ACTIVE_VH
 const PHONE_ENTER_END = 375 / WRAPPER_ACTIVE_VH  // book fully shrunk away, phone fully revealed
-const PAGE_FLIP_END = 560 / WRAPPER_ACTIVE_VH    // page-flipping runs from PHONE_ENTER_END to here
+const PAGE_FLIP_END = 450 / WRAPPER_ACTIVE_VH    // lock-screen swipe-up runs from PHONE_ENTER_END to here
 
 // Subtle interactive parallax — mouse on desktop, device tilt on mobile.
 // iOS 13+ only grants motion access after a user gesture, so we request it
@@ -395,14 +395,9 @@ function HeroSection() {
   // Once inside the phone, scrolling flips rapidly through a few day pages —
   // an actual page turning (rotateY, hinged at the left edge like a book),
   // swapped at the midpoint when it's edge-on and invisible either way.
-  const pageFlipT = windowT(progress, PHONE_ENTER_END, PAGE_FLIP_END)
-  const pageFloat = Math.min(pageFlipT * PAGE_FLIP_ENTRIES.length, PAGE_FLIP_ENTRIES.length - 1)
-  const pageBase = Math.floor(pageFloat)
-  const pageLocalT = pageFloat - pageBase
-  // Book page flip: ease-in-out, pivots on left edge (spine), no back face so next page shows clean
-  const flipEased = pageLocalT < 0.5 ? 2 * pageLocalT * pageLocalT : 1 - Math.pow(-2 * pageLocalT + 2, 2) / 2
-  const pageFlipRotateY = lerp(0, -180, flipEased)
-  const nextPageIndex = Math.min(PAGE_FLIP_ENTRIES.length - 1, pageBase + 1)
+  // Lock screen swipe-up: 0 = locked, 1 = portada fully revealed
+  const swipeRaw = windowT(progress, PHONE_ENTER_END, PAGE_FLIP_END)
+  const lockSlide = swipeRaw < 0.5 ? 2 * swipeRaw * swipeRaw : 1 - Math.pow(-2 * swipeRaw + 2, 2) / 2
 
   return (
     <div ref={wrapperRef} style={{ height: `${WRAPPER_ACTIVE_VH + 100}vh`, position: 'relative', background: '#000' }}>
@@ -590,44 +585,49 @@ function HeroSection() {
           transform: `translateY(${phoneRise * 100}vh)`,
         }}>
           <div style={{
-            width: 'clamp(200px, 44vw, 260px)', aspectRatio: '1414/2000',
-            border: '7px solid #1a1a1a', borderRadius: '24px',
-            boxShadow: '0 0 0 1px rgba(201,169,110,0.35), 0 30px 80px rgba(0,0,0,0.6)',
-            position: 'relative', overflow: 'hidden', background: '#ede6da', marginBottom: '32px',
+            width: 'clamp(200px, 44vw, 240px)', aspectRatio: '9/19.5',
+            border: '8px solid #111', borderRadius: '44px',
+            boxShadow: '0 0 0 1px rgba(201,169,110,0.3), 0 30px 80px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.07)',
+            position: 'relative', overflow: 'hidden', background: '#000', marginBottom: '32px',
           }}>
-            {/* Top bar — book subtitle instead of a blank notch */}
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '22px', background: '#ede6da', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontFamily: 'var(--font-serif)', fontSize: '7px', color: '#888', letterSpacing: '0.08em', fontStyle: 'italic' }}>
-                ¿Sientes a Dios lejos?
-              </span>
+            {/* Dynamic Island */}
+            <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', width: '100px', height: '28px', borderRadius: '18px', background: '#000', zIndex: 30 }} />
+
+            {/* Portada — always underneath, revealed when lock screen slides up */}
+            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+              <img src={portada} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
-            {/* Book page flip: next page underneath, current flips over it from left edge */}
-            <div style={{ position: 'absolute', inset: '22px 0 0', perspective: '900px' }}>
-              {/* Next page — always visible, progressively revealed as current page flips */}
-              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#ede6da' }}>
-                <img
-                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
-              {/* Current page — front face only, pivots on left edge (spine), rotates 0° → -180° */}
-              <div style={{
-                position: 'absolute', inset: 0,
-                transformOrigin: '0% 50%',
-                transform: `rotateY(${pageFlipRotateY}deg)`,
-                transformStyle: 'preserve-3d',
-              }}>
-                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset -10px 0 20px -12px rgba(0,0,0,0.4)' }}>
-                  <img
-                    src={PAGE_FLIP_ENTRIES[pageBase].img}
-                    alt={PAGE_FLIP_ENTRIES[pageBase].title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                  />
+
+            {/* Lock screen — slides upward to unlock */}
+            <div style={{
+              position: 'absolute', inset: 0, overflow: 'hidden',
+              transform: `translateY(${-lockSlide * 105}%)`,
+            }}>
+              {/* Blurred portada as wallpaper */}
+              <img src={portada} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(18px) brightness(0.45)', transform: 'scale(1.12)', display: 'block' }} />
+              {/* Status bar */}
+              <div style={{ position: 'absolute', top: '14px', left: '22px', right: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
+                <span style={{ color: '#fff', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>9:41</span>
+                <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                  <svg width="16" height="11" viewBox="0 0 16 11" fill="white" opacity={0.9}><rect x="0" y="4" width="3" height="7" rx="1"/><rect x="4.5" y="2.5" width="3" height="8.5" rx="1"/><rect x="9" y="0.5" width="3" height="10.5" rx="1"/></svg>
+                  <svg width="25" height="11" viewBox="0 0 25 11" fill="none"><rect x="0.5" y="0.5" width="21" height="10" rx="3.5" stroke="white" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="17" height="8" rx="2.5" fill="white"/><path d="M23 3.5v4a2 2 0 000-4z" fill="white" fillOpacity="0.4"/></svg>
                 </div>
               </div>
+              {/* Time & date */}
+              <div style={{ position: 'absolute', top: '30%', left: 0, right: 0, textAlign: 'center', zIndex: 2 }}>
+                <div style={{ color: '#fff', fontSize: 'clamp(40px, 13vw, 58px)', fontWeight: 200, lineHeight: 1, fontFamily: 'var(--font-sans)', letterSpacing: '-0.02em' }}>9:41</div>
+                <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: 'clamp(10px, 3vw, 12px)', marginTop: '6px', fontFamily: 'var(--font-sans)', fontWeight: 400, letterSpacing: '0.01em' }}>
+                  Lunes, 29 de septiembre
+                </div>
+              </div>
+              {/* Swipe up hint */}
+              <div style={{ position: 'absolute', bottom: '22px', left: 0, right: 0, textAlign: 'center', zIndex: 2, opacity: Math.max(0, 1 - swipeRaw * 5) }}>
+                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '9px', fontFamily: 'var(--font-sans)', letterSpacing: '0.08em' }}>↑ &nbsp; DESLIZA HACIA ARRIBA</div>
+              </div>
             </div>
-            <div style={{ position: 'absolute', bottom: '6px', left: '50%', transform: 'translateX(-50%)', width: '55px', height: '3px', borderRadius: '2px', background: '#1a1a1a', zIndex: 10 }} />
+
+            {/* Home indicator */}
+            <div style={{ position: 'absolute', bottom: '7px', left: '50%', transform: 'translateX(-50%)', width: '100px', height: '4px', borderRadius: '3px', background: `rgba(255,255,255,${0.3 + lockSlide * 0.4})`, zIndex: 30 }} />
           </div>
 
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.8 }}>
