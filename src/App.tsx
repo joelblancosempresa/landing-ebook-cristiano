@@ -271,9 +271,14 @@ function Header() {
         borderBottom: '1px solid rgba(201,169,110,0.15)',
       }}
     >
-      <span style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(14px, 2vw, 16px)', fontWeight: 700 }}>
-        Joel Blanco Sierra
-      </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ width: '32px', height: '32px', borderRadius: '50%', overflow: 'hidden', border: '1px solid rgba(201,169,110,0.4)', flexShrink: 0 }}>
+          <img src={authorPhoto} alt="Joel Blanco Sierra" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        <span style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(13px, 1.8vw, 15px)', fontWeight: 700, fontStyle: 'italic' }}>
+          Cuando Dios se siente lejos
+        </span>
+      </div>
       <a
         href="#presave"
         style={{
