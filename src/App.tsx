@@ -48,38 +48,36 @@ const CALENDAR_FACE_STYLE = {
   backgroundPosition: 'center',
 }
 
+// índice's own box shrank to make room for the wider calendar (above), and
+// a `cover` crop there was cutting the "Tabla de contenidos" title the same
+// way it did the calendar — `contain` shows índice whole, letterboxed
+// against the page color.
+const INDICE_FACE_STYLE = {
+  width: INDICE_WIDTH, height: '100%',
+  backgroundImage: `url(${indice})`, backgroundSize: 'contain' as const,
+  backgroundPosition: 'center', backgroundRepeat: 'no-repeat' as const,
+  backgroundColor: '#f7f0dd',
+}
+
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
 // like an actual page turning, revealing a blank page underneath. 0 = closed
 // (identical to the plain closed box), 1 = swung fully open to the left.
-//
-// `settled` marks the point where the WHOLE BOOK's own separate rotation
-// (the spin that turns it from back to front) has finished. Measured
-// on-screen: the cover still fully covers the calendar's share of the page
-// for a long stretch of the opening — it isn't cracked open far enough for
-// the flat page's own calendar to be doing anything yet — so before
-// `settled`, the calendar is painted on the COVER's own inner face, which
-// is what's actually rotating into view. At/after `settled`, the cover has
-// swung open enough that the flat page underneath is the better (fuller,
-// unforeshortened) view, so that one carries it instead. Exactly one of the
-// two paints it, never both — same width/crop on both (CALENDAR_FACE_STYLE)
-// so the handoff itself isn't visible as a jump.
-function Book3D({ openT = 0, settled = false }: { openT?: number; settled?: boolean }) {
+function Book3D({ openT = 0 }: { openT?: number }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Page underneath — always present, same width as the cover so it's
           exactly hidden behind it at any rotation, never poking out, and
-          the book never changes size when it opens. índice lives here,
-          always. The calendar does too, but only once settled — see above. */}
+          the book never changes size when it opens. This is the ONLY
+          surface that ever paints the calendar or índice — fixed here, it
+          never jumps to the cover or anywhere else. Left: calendar. Right:
+          índice. */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div style={settled ? CALENDAR_FACE_STYLE : { width: CALENDAR_WIDTH, height: '100%', background: '#f7f0dd' }} />
-        <div style={{ width: INDICE_WIDTH, height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <div style={CALENDAR_FACE_STYLE} />
+        <div style={INDICE_FACE_STYLE} />
       </div>
 
-      {/* Front cover — hinged flap: portada outside. Inner face: the
-          calendar on the left share of the width, but only before
-          `settled` (see above) — plain on the right always (over índice,
-          which clears the hinge fast and was never the problem). */}
+      {/* Front cover — hinged flap: portada outside, plain inside. */}
       <div
         style={{
           position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
@@ -90,16 +88,7 @@ function Book3D({ openT = 0, settled = false }: { openT?: number; settled?: bool
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', display: 'flex' }}>
-          {settled ? (
-            <div style={{ width: '100%', height: '100%', background: '#f7f0dd' }} />
-          ) : (
-            <>
-              <div style={CALENDAR_FACE_STYLE} />
-              <div style={{ width: INDICE_WIDTH, height: '100%', background: '#f7f0dd' }} />
-            </>
-          )}
-        </div>
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
       </div>
 
       {/* Back cover */}
@@ -564,7 +553,7 @@ function HeroSection() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              <Book3D openT={openT} settled={progress >= ROTATE2_END} />
+              <Book3D openT={openT} />
             </div>
           </div>
         </div>
