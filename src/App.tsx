@@ -30,17 +30,24 @@ const PAGE_EDGE_BG =
   'linear-gradient(to right, rgba(0,0,0,0.45), transparent 18%, transparent 82%, rgba(0,0,0,0.45)), ' +
   'repeating-linear-gradient(to bottom, #f5eed9 0px, #f5eed9 1px, #e7dcc0 1px, #e7dcc0 1.6px)'
 
-// The calendar page's box (half the book's width, full height) is much
-// narrower than the source photo — `cover` was cropping most of it away,
-// cutting off the "Calendario" title. `contain` shows the whole image
-// instead, letterboxed against the page color. Shared by both the cover's
-// inner face and the page underneath so the crop never visibly changes
-// during the handoff between them (see `settled` below).
+// The calendar photo is much wider (relative to its height) than a plain
+// 50/50 half-page — a `cover` crop at 50% cut off the "Calendario" title on
+// both sides. Rather than letterbox it (margins the user didn't want) or
+// widen the whole book (rejected earlier — it made the book itself jump in
+// size), only the calendar's own share of the page width grows; índice
+// takes what's left. The book's overall width is unchanged, the two pages
+// are just no longer an even split.
+const CALENDAR_WIDTH = '78%'
+const INDICE_WIDTH = '22%'
+
+// Shared by both the cover's inner face and the page underneath so the crop
+// never visibly changes during the handoff between them (see `settled`
+// below) — `cover` now that its box is wide enough not to butcher the
+// title.
 const CALENDAR_FACE_STYLE = {
-  width: '50%', height: '100%',
-  backgroundImage: `url(${primeraPagina})`, backgroundSize: 'contain' as const,
-  backgroundPosition: 'center', backgroundRepeat: 'no-repeat' as const,
-  backgroundColor: '#f7f0dd',
+  width: CALENDAR_WIDTH, height: '100%',
+  backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover' as const,
+  backgroundPosition: 'center',
 }
 
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
@@ -71,8 +78,8 @@ function Book3D({ openT = 0, settled = false }: { openT?: number; settled?: bool
           índice, always (its side of the cover clears the hinge fast
           regardless, so índice was never the problem). */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div style={settled ? CALENDAR_FACE_STYLE : { width: '50%', height: '100%', background: '#f7f0dd' }} />
-        <div style={{ width: '50%', height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <div style={settled ? CALENDAR_FACE_STYLE : { width: CALENDAR_WIDTH, height: '100%', background: '#f7f0dd' }} />
+        <div style={{ width: INDICE_WIDTH, height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       </div>
 
       {/* Front cover — hinged flap: portada outside. Inner face: plain on
@@ -95,7 +102,7 @@ function Book3D({ openT = 0, settled = false }: { openT?: number; settled?: bool
           ) : (
             <>
               <div style={CALENDAR_FACE_STYLE} />
-              <div style={{ width: '50%', height: '100%', background: '#f7f0dd' }} />
+              <div style={{ width: INDICE_WIDTH, height: '100%', background: '#f7f0dd' }} />
             </>
           )}
         </div>
