@@ -399,8 +399,9 @@ function HeroSection() {
   const pageFloat = Math.min(pageFlipT * PAGE_FLIP_ENTRIES.length, PAGE_FLIP_ENTRIES.length - 1)
   const pageBase = Math.floor(pageFloat)
   const pageLocalT = pageFloat - pageBase
-  // Horizontal slide: current page slides left, next comes from right simultaneously
-  const slidePercent = pageLocalT * 100
+  // Book page flip: ease-in-out, pivots on left edge (spine), no back face so next page shows clean
+  const flipEased = pageLocalT < 0.5 ? 2 * pageLocalT * pageLocalT : 1 - Math.pow(-2 * pageLocalT + 2, 2) / 2
+  const pageFlipRotateY = lerp(0, -180, flipEased)
   const nextPageIndex = Math.min(PAGE_FLIP_ENTRIES.length - 1, pageBase + 1)
 
   return (
@@ -600,23 +601,30 @@ function HeroSection() {
                 ¿Sientes a Dios lejos?
               </span>
             </div>
-            {/* Slide page transition: current slides left, next comes from right */}
-            <div style={{ position: 'absolute', inset: '22px 0 0', overflow: 'hidden' }}>
-              {/* Outgoing page */}
-              <div style={{ position: 'absolute', inset: 0, transform: `translateX(${-slidePercent}%)`, overflow: 'hidden', background: '#ede6da' }}>
+            {/* Book page flip: next page underneath, current flips over it from left edge */}
+            <div style={{ position: 'absolute', inset: '22px 0 0', perspective: '900px' }}>
+              {/* Next page — always visible, progressively revealed as current page flips */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#ede6da' }}>
                 <img
-                  src={PAGE_FLIP_ENTRIES[pageBase].img}
-                  alt={PAGE_FLIP_ENTRIES[pageBase].title}
+                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
+                  alt=""
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
-              {/* Incoming page */}
-              <div style={{ position: 'absolute', inset: 0, transform: `translateX(${100 - slidePercent}%)`, overflow: 'hidden', background: '#ede6da' }}>
-                <img
-                  src={PAGE_FLIP_ENTRIES[nextPageIndex].img}
-                  alt={PAGE_FLIP_ENTRIES[nextPageIndex].title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
+              {/* Current page — front face only, pivots on left edge (spine), rotates 0° → -180° */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                transformOrigin: '0% 50%',
+                transform: `rotateY(${pageFlipRotateY}deg)`,
+                transformStyle: 'preserve-3d',
+              }}>
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden', background: '#ede6da', boxShadow: 'inset -10px 0 20px -12px rgba(0,0,0,0.4)' }}>
+                  <img
+                    src={PAGE_FLIP_ENTRIES[pageBase].img}
+                    alt={PAGE_FLIP_ENTRIES[pageBase].title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
               </div>
             </div>
             <div style={{ position: 'absolute', bottom: '6px', left: '50%', transform: 'translateX(-50%)', width: '55px', height: '3px', borderRadius: '2px', background: '#1a1a1a', zIndex: 10 }} />
