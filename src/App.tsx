@@ -65,26 +65,26 @@ function Book3D({ openT = 0, showSpread = false }: { openT?: number; showSpread?
         </div>
       )}
 
-      {/* Front cover — hinged flap: portada outside, plain inside. The
-          cover's own footprint never lines up exactly with the page
-          underneath it (it's hinged at the spine and swings out, so at no
-          rotation does it cover the exact same area as the flat page/spread
-          behind it) — painting anything but a flat page-matching color on
-          this face always showed through as a mismatched sliver or a
-          doubled image against the real page. Plain keeps it invisible
-          against the page color in every gap it doesn't quite cover. */}
-      <div
-        style={{
-          position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
-          transformOrigin: '0% 50%',
-          transform: `rotateY(${-openT * 160}deg) translateZ(${half}px)`,
-        }}
-      >
-        <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
-          <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      {/* Front cover — hinged flap: portada outside, plain inside. Once the
+          full-width spread has taken over (showSpread), the cover is nearly
+          — but never exactly — edge-on, so leaving it rendered shows up as
+          a third page-like panel sandwiched between the calendar and
+          índice. Hidden entirely for that stretch; it reappears already
+          closed right as the spread itself unmounts. */}
+      {!showSpread && (
+        <div
+          style={{
+            position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
+            transformOrigin: '0% 50%',
+            transform: `rotateY(${-openT * 160}deg) translateZ(${half}px)`,
+          }}
+        >
+          <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
+            <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+          <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
-      </div>
+      )}
 
       {/* Back cover */}
       <div style={{ position: 'absolute', inset: 0, transform: `rotateY(180deg) translateZ(${half}px)`, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
