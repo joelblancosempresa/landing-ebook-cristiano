@@ -33,20 +33,45 @@ const PAGE_EDGE_BG =
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
 // like an actual page turning, revealing a blank page underneath. 0 = closed
 // (identical to the plain closed box), 1 = swung fully open to the left.
-function Book3D({ openT = 0 }: { openT?: number }) {
+//
+// `settled` marks the point where the WHOLE BOOK's own separate rotation
+// (the spin that turns it from back to front) has finished — while that
+// outer spin is still running at the same time as the cover's own hinge
+// rotation, CSS backface-visibility on the cover's inner face becomes
+// unpredictable (its crossover depends on the combined angle of both
+// rotations, which is a moving target), so it can't be trusted to decide
+// which surface shows the calendar. Before `settled`: the cover's own face
+// carries it (its rotation is well underway before the outer spin finishes,
+// so the crossover being unpredictable doesn't matter — it's visible either
+// way). At/after `settled`: the outer spin has stopped, so the cover's
+// rotation alone is now predictable — but by then it's swung open wide
+// enough that the flat page underneath is the better view, so that's what
+// carries it instead. Either way, exactly one of the two paints it.
+function Book3D({ openT = 0, settled = false }: { openT?: number; settled?: boolean }) {
   const half = BOOK_DEPTH / 2
   return (
     <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
       {/* Page underneath — always present, same width as the cover so it's
           exactly hidden behind it at any rotation, never poking out, and
           the book never changes size when it opens. Left: "primera
-          página" (the calendar). Right: índice. */}
+          página" (the calendar), once settled — see `settled` above. Right:
+          índice, always (its side of the cover clears the hinge fast
+          regardless, so índice was never the problem). */}
       <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, display: 'flex' }}>
-        <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <div
+          style={
+            settled
+              ? { width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+              : { width: '50%', height: '100%', background: '#f7f0dd' }
+          }
+        />
         <div style={{ width: '50%', height: '100%', backgroundImage: `url(${indice})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       </div>
 
-      {/* Front cover — hinged flap: portada outside, plain inside. */}
+      {/* Front cover — hinged flap: portada outside. Inner face: plain on
+          the right half (over índice, which never needed help), and — only
+          before `settled` — the calendar on the left half; see `settled`
+          above for why the two never both carry it at once. */}
       <div
         style={{
           position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
@@ -57,7 +82,16 @@ function Book3D({ openT = 0 }: { openT?: number }) {
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', background: '#f7f0dd' }} />
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', display: 'flex' }}>
+          {settled ? (
+            <div style={{ width: '100%', height: '100%', background: '#f7f0dd' }} />
+          ) : (
+            <>
+              <div style={{ width: '50%', height: '100%', backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+              <div style={{ width: '50%', height: '100%', background: '#f7f0dd' }} />
+            </>
+          )}
+        </div>
       </div>
 
       {/* Back cover */}
@@ -522,7 +556,7 @@ function HeroSection() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              <Book3D openT={openT} />
+              <Book3D openT={openT} settled={progress >= ROTATE2_END} />
             </div>
           </div>
         </div>
