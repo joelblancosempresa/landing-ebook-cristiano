@@ -199,8 +199,8 @@ const CLOSE_END = 240 / WRAPPER_ACTIVE_VH        // fully closed and settled at 
 // it fades in pinned in front of the book (higher z-index), stays fixed on
 // screen for the whole page-flip run, and only moves once the sticky box
 // itself releases — i.e. once all pages have finished flipping.
-const CARDS_SHRINK_START = 250 / WRAPPER_ACTIVE_VH
-const CARDS_GONE = 275 / WRAPPER_ACTIVE_VH
+const CARDS_SHRINK_START = 310 / WRAPPER_ACTIVE_VH
+const CARDS_GONE = 335 / WRAPPER_ACTIVE_VH
 const PHONE_ENTER_END = 375 / WRAPPER_ACTIVE_VH  // book fully shrunk away, phone fully revealed
 const PAGE_FLIP_END = 440 / WRAPPER_ACTIVE_VH    // rapid page-flipping runs from PHONE_ENTER_END to here
 
