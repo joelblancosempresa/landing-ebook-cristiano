@@ -593,9 +593,9 @@ function HeroSection() {
             {/* Dynamic Island */}
             <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', width: '100px', height: '28px', borderRadius: '18px', background: '#000', zIndex: 30 }} />
 
-            {/* Portada — always underneath, revealed when lock screen slides up */}
-            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-              <img src={portada} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            {/* Portada — revealed when lock screen slides up */}
+            <div style={{ position: 'absolute', inset: 0, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+              <img src={portada} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block' }} />
             </div>
 
             {/* Lock screen — slides upward to unlock */}
@@ -603,31 +603,61 @@ function HeroSection() {
               position: 'absolute', inset: 0, overflow: 'hidden',
               transform: `translateY(${-lockSlide * 105}%)`,
             }}>
-              {/* Blurred portada as wallpaper */}
-              <img src={portada} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(18px) brightness(0.45)', transform: 'scale(1.12)', display: 'block' }} />
+              {/* Blurred portada wallpaper */}
+              <img src={portada} alt="" style={{ position: 'absolute', inset: '-10%', width: '120%', height: '120%', objectFit: 'cover', filter: 'blur(22px) brightness(0.38) saturate(1.4)', display: 'block' }} />
+              {/* Dark overlay for iOS depth */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0.4) 100%)' }} />
               {/* Status bar */}
-              <div style={{ position: 'absolute', top: '14px', left: '22px', right: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
-                <span style={{ color: '#fff', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>9:41</span>
-                <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                  <svg width="16" height="11" viewBox="0 0 16 11" fill="white" opacity={0.9}><rect x="0" y="4" width="3" height="7" rx="1"/><rect x="4.5" y="2.5" width="3" height="8.5" rx="1"/><rect x="9" y="0.5" width="3" height="10.5" rx="1"/></svg>
-                  <svg width="25" height="11" viewBox="0 0 25 11" fill="none"><rect x="0.5" y="0.5" width="21" height="10" rx="3.5" stroke="white" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="17" height="8" rx="2.5" fill="white"/><path d="M23 3.5v4a2 2 0 000-4z" fill="white" fillOpacity="0.4"/></svg>
+              <div style={{ position: 'absolute', top: '12px', left: '20px', right: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
+                <span style={{ color: '#fff', fontSize: '10.5px', fontWeight: 600, fontFamily: 'var(--font-sans)', letterSpacing: '0.01em' }}>9:41</span>
+                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                  <svg width="15" height="11" viewBox="0 0 15 11" fill="white"><rect x="0" y="4" width="2.5" height="7" rx="0.8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx="0.8"/><rect x="8" y="0.5" width="2.5" height="10.5" rx="0.8"/><rect x="12" y="0.5" width="2.5" height="10.5" rx="0.8" opacity={0.3}/></svg>
+                  <svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M6.5 2C4.2 2 2.1 2.9 0.6 4.4L0 3.8C1.6 2.1 3.9 1 6.5 1s4.9 1.1 6.5 2.8l-.6.6C10.9 2.9 8.8 2 6.5 2z" fill="white" opacity={0.5}/><path d="M6.5 4.5c-1.5 0-2.9.6-3.9 1.6l-.6-.6C3.2 4.3 4.8 3.5 6.5 3.5s3.3.8 4.5 2l-.6.6c-1-1-2.4-1.6-3.9-1.6z" fill="white" opacity={0.75}/><path d="M6.5 7c-.8 0-1.5.3-2 .8l-.6-.6C4.5 6.5 5.4 6 6.5 6s2 .5 2.6 1.2l-.6.6C8 7.3 7.3 7 6.5 7z" fill="white"/><circle cx="6.5" cy="9.5" r="1" fill="white"/></svg>
+                  <svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x="0.5" y="0.5" width="20" height="10" rx="3.5" stroke="white" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="16" height="8" rx="2.5" fill="white"/><path d="M22 3.5v4a2 2 0 000-4z" fill="white" fillOpacity="0.4"/></svg>
                 </div>
               </div>
-              {/* Time & date */}
-              <div style={{ position: 'absolute', top: '30%', left: 0, right: 0, textAlign: 'center', zIndex: 2 }}>
-                <div style={{ color: '#fff', fontSize: 'clamp(40px, 13vw, 58px)', fontWeight: 200, lineHeight: 1, fontFamily: 'var(--font-sans)', letterSpacing: '-0.02em' }}>9:41</div>
-                <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: 'clamp(10px, 3vw, 12px)', marginTop: '6px', fontFamily: 'var(--font-sans)', fontWeight: 400, letterSpacing: '0.01em' }}>
-                  Lunes, 29 de septiembre
+              {/* Lock icon + Time + Date */}
+              <div style={{ position: 'absolute', top: '27%', left: 0, right: 0, textAlign: 'center', zIndex: 2 }}>
+                <svg width="16" height="20" viewBox="0 0 16 20" fill="none" style={{ marginBottom: '8px', opacity: 0.9 }}>
+                  <rect x="2.5" y="8.5" width="11" height="9" rx="2.5" fill="white" opacity={0.9}/>
+                  <path d="M4.5 8.5V6a3.5 3.5 0 0 1 7 0v2.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity={0.9}/>
+                  <circle cx="8" cy="13" r="1.5" fill="rgba(0,0,0,0.5)"/>
+                </svg>
+                <div style={{ color: '#fff', fontSize: 'clamp(38px, 12vw, 54px)', fontWeight: 300, lineHeight: 1, fontFamily: '-apple-system, BlinkMacSystemFont, var(--font-sans)', letterSpacing: '-0.03em', textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>9:41</div>
+                <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 'clamp(10px, 2.8vw, 12px)', marginTop: '8px', fontFamily: '-apple-system, BlinkMacSystemFont, var(--font-sans)', fontWeight: 400, letterSpacing: '0.01em' }}>
+                  Martes, 30 de septiembre
                 </div>
               </div>
-              {/* Swipe up hint */}
-              <div style={{ position: 'absolute', bottom: '22px', left: 0, right: 0, textAlign: 'center', zIndex: 2, opacity: Math.max(0, 1 - swipeRaw * 5) }}>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '9px', fontFamily: 'var(--font-sans)', letterSpacing: '0.08em' }}>↑ &nbsp; DESLIZA HACIA ARRIBA</div>
+              {/* iOS bottom controls */}
+              <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, zIndex: 2, opacity: Math.max(0, 1 - swipeRaw * 4) }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 24px', marginBottom: '12px' }}>
+                  {/* Flashlight */}
+                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="14" height="18" viewBox="0 0 14 18" fill="white">
+                      <path d="M4 0h6l1 6H3L4 0z" opacity={0.9}/>
+                      <path d="M3 6l1 2h6l1-2H3z" opacity={0.7}/>
+                      <rect x="4.5" y="8" width="5" height="8" rx="2.5" opacity={0.9}/>
+                      <line x1="7" y1="10" x2="7" y2="14" stroke="rgba(0,0,0,0.3)" strokeWidth="1.5"/>
+                    </svg>
+                  </div>
+                  {/* Swipe hint text */}
+                  <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '8.5px', fontFamily: 'var(--font-sans)', letterSpacing: '0.1em', textAlign: 'center' }}>
+                    DESLIZA HACIA ARRIBA
+                  </div>
+                  {/* Camera */}
+                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="18" height="15" viewBox="0 0 18 15" fill="white">
+                      <path d="M6 0l-1.5 2H1.5C0.7 2 0 2.7 0 3.5v10C0 14.3 0.7 15 1.5 15h15c0.8 0 1.5-0.7 1.5-1.5v-10C18 2.7 17.3 2 16.5 2h-3L12 0H6z" opacity={0.9}/>
+                      <circle cx="9" cy="9" r="3.5" fill="rgba(0,0,0,0.35)"/>
+                      <circle cx="9" cy="9" r="2.5" fill="rgba(255,255,255,0.2)"/>
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Home indicator */}
-            <div style={{ position: 'absolute', bottom: '7px', left: '50%', transform: 'translateX(-50%)', width: '100px', height: '4px', borderRadius: '3px', background: `rgba(255,255,255,${0.3 + lockSlide * 0.4})`, zIndex: 30 }} />
+            <div style={{ position: 'absolute', bottom: '7px', left: '50%', transform: 'translateX(-50%)', width: '90px', height: '4px', borderRadius: '3px', background: `rgba(255,255,255,${0.35 + lockSlide * 0.35})`, zIndex: 30 }} />
           </div>
 
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.8 }}>
