@@ -604,7 +604,7 @@ function HeroSection() {
               transform: `translateY(${-lockSlide * 105}%)`,
             }}>
               {/* Blurred portada wallpaper */}
-              <img src={portada} alt="" style={{ position: 'absolute', inset: '-10%', width: '120%', height: '120%', objectFit: 'cover', filter: 'blur(22px) brightness(0.38) saturate(1.4)', display: 'block' }} />
+              <img src={portada} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(24px) brightness(0.38) saturate(1.4)', transform: 'scale(1.25)', display: 'block' }} />
               {/* Dark overlay for iOS depth */}
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0.4) 100%)' }} />
               {/* Status bar */}
