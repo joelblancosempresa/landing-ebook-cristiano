@@ -616,17 +616,26 @@ function HeroSection() {
                   <svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x="0.5" y="0.5" width="20" height="10" rx="3.5" stroke="white" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="16" height="8" rx="2.5" fill="white"/><path d="M22 3.5v4a2 2 0 000-4z" fill="white" fillOpacity="0.4"/></svg>
                 </div>
               </div>
-              {/* Lock icon + Time + Date */}
-              <div style={{ position: 'absolute', top: '27%', left: 0, right: 0, textAlign: 'center', zIndex: 2 }}>
-                <svg width="16" height="20" viewBox="0 0 16 20" fill="none" style={{ marginBottom: '8px', opacity: 0.9 }}>
-                  <rect x="2.5" y="8.5" width="11" height="9" rx="2.5" fill="white" opacity={0.9}/>
-                  <path d="M4.5 8.5V6a3.5 3.5 0 0 1 7 0v2.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity={0.9}/>
-                  <circle cx="8" cy="13" r="1.5" fill="rgba(0,0,0,0.5)"/>
-                </svg>
+              {/* Time + Date */}
+              <div style={{ position: 'absolute', top: '18%', left: 0, right: 0, textAlign: 'center', zIndex: 2 }}>
                 <div style={{ color: '#fff', fontSize: 'clamp(38px, 12vw, 54px)', fontWeight: 300, lineHeight: 1, fontFamily: '-apple-system, BlinkMacSystemFont, var(--font-sans)', letterSpacing: '-0.03em', textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>9:41</div>
                 <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 'clamp(10px, 2.8vw, 12px)', marginTop: '8px', fontFamily: '-apple-system, BlinkMacSystemFont, var(--font-sans)', fontWeight: 400, letterSpacing: '0.01em' }}>
                   Martes, 30 de septiembre
                 </div>
+              </div>
+              {/* Animated lock — center */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 2 }}>
+                <svg width="42" height="52" viewBox="0 0 42 52" fill="none">
+                  {/* Body */}
+                  <rect x="4" y="23" width="34" height="25" rx="7" fill="rgba(255,255,255,0.88)"/>
+                  {/* Keyhole */}
+                  <circle cx="21" cy="35.5" r="4.5" fill="rgba(0,0,0,0.38)"/>
+                  <rect x="19.2" y="35.5" width="3.6" height="6" rx="1.4" fill="rgba(0,0,0,0.38)"/>
+                  {/* Shackle — rotates open around right anchor */}
+                  <g style={{ transformOrigin: '31px 25px', transform: `rotate(${Math.min(1, swipeRaw * 6) * -68}deg)` }}>
+                    <path d="M11 25V17C11 7.5 31 7.5 31 17V25" stroke="rgba(255,255,255,0.9)" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+                  </g>
+                </svg>
               </div>
               {/* iOS bottom controls */}
               <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, zIndex: 2, opacity: Math.max(0, 1 - swipeRaw * 4) }}>
