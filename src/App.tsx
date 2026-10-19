@@ -362,7 +362,7 @@ function HeroSection() {
   // diagonal — they should appear, not already be sitting there. They also
   // start small and grow to full size as you keep scrolling, then shrink back
   // away as the book turns off toward the phone.
-  const cardsGrow = windowT(progress, CLOSE_END, CLOSE_END + 25 / WRAPPER_ACTIVE_VH)
+  const cardsGrow = windowT(progress, CLOSE_END + 20 / WRAPPER_ACTIVE_VH, CLOSE_END + 45 / WRAPPER_ACTIVE_VH)
   const cardsShrink = windowT(progress, CARDS_SHRINK_START, CARDS_GONE)
   const cardsOpacity = cardsGrow * (1 - cardsShrink)
   const cardsScale = lerp(0.78, 1, cardsGrow) * lerp(1, 0.3, cardsShrink)
@@ -478,7 +478,7 @@ function HeroSection() {
       {/* "Cómo funciona" copy — same idea: rises from below right as the pop-ups
           shrink away, while the book turns and shrinks off toward the phone —
           passes behind it as you keep scrolling, never disappearing. */}
-      <div style={{ position: 'absolute', top: '310vh', left: 0, right: 0, textAlign: 'center', padding: '0 24px', zIndex: 1 }}>
+      <div style={{ position: 'absolute', top: '385vh', left: 0, right: 0, textAlign: 'center', padding: '0 24px', zIndex: 1 }}>
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '18px', opacity: 0.8 }}>
             ✦ &nbsp; Cómo funciona &nbsp; ✦
@@ -682,6 +682,246 @@ function HeroSection() {
   )
 }
 
+// ─── Survey to get the free ebook ────────────────────────────────────────────
+const SURVEY_QS: Array<{
+  id: string; q: string; type: 'single' | 'multi' | 'text'; opts?: string[]; optional?: boolean
+}> = [
+  { id: 'relacion', q: '¿Cómo describirías hoy\ntu relación con Dios?', type: 'single',
+    opts: ['Cerca', 'Estable, pero en piloto automático', 'Lejos', 'Nunca la he sentido cerca'] },
+  { id: 'bloqueo', q: '¿Qué es lo que más\nse mete entre tú y Dios?', type: 'single',
+    opts: ['El móvil y las redes', 'El cansancio o la falta de tiempo', 'No sé cómo orar ni leer la Biblia', 'Un pecado que se repite', 'Las dudas'] },
+  { id: 'horas', q: '¿Cuántas horas al día\npasas con el móvil?', type: 'single',
+    opts: ['Menos de 2', '2–4', '4–6', 'Más de 6', 'No lo sé'] },
+  { id: 'app', q: '¿Qué app te\nquita más tiempo?', type: 'single',
+    opts: ['Instagram', 'TikTok', 'YouTube', 'WhatsApp', 'Otra'] },
+  { id: 'momento', q: '¿Cuándo te gustaría tener\ntu rato con Dios?', type: 'single',
+    opts: ['Al despertar', 'A mediodía', 'Por la noche', 'No tengo un momento fijo'] },
+  { id: 'intentos', q: '¿Qué has probado ya para\nser más constante?\nPuedes marcar varias.', type: 'multi',
+    opts: ['Apps de la Biblia (YouVersion u otras)', 'Alarmas o recordatorios', 'Límites de tiempo del móvil', 'Grupos o planes de lectura', 'Nada todavía'] },
+  { id: 'movil', q: '¿Qué móvil usas?', type: 'single', opts: ['iPhone', 'Android'] },
+  { id: 'cambio', q: 'Si pudieras cambiar una sola cosa\nde tu vida con Dios en 21 días,\n¿cuál sería?', type: 'text', optional: true },
+]
+const SURVEY_STEPS = SURVEY_QS.length + 1 // +1 for personal info
+
+function SurveyModal({ onClose }: { onClose: () => void }) {
+  const [step, setStep] = useState(0)
+  const [answers, setAnswers] = useState<Record<string, string | string[]>>({})
+  const [dir, setDir] = useState<1 | -1>(1)
+  const [visible, setVisible] = useState(true)
+  const [nombre, setNombre] = useState('')
+  const [email, setEmail] = useState('')
+  const [pais, setPais] = useState('')
+  const [mayor18, setMayor18] = useState(false)
+  const [consent, setConsent] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [done, setDone] = useState(false)
+
+  const q = SURVEY_QS[step]
+  const isInfoStep = step === SURVEY_QS.length
+
+  const canContinue = () => {
+    if (done) return false
+    if (isInfoStep) return !!nombre && !!email && !!pais && mayor18 && consent
+    if (!q) return false
+    if (q.type === 'text' && q.optional) return true
+    const a = answers[q.id]
+    if (q.type === 'multi') return Array.isArray(a) && (a as string[]).length > 0
+    return !!a
+  }
+
+  const animate = (d: 1 | -1, fn: () => void) => {
+    setDir(d); setVisible(false)
+    setTimeout(() => { fn(); setVisible(true) }, 220)
+  }
+
+  const setSingle = (id: string, val: string) => setAnswers(a => ({ ...a, [id]: val }))
+  const toggleMulti = (id: string, val: string) => setAnswers(a => {
+    const cur = (a[id] as string[] | undefined) ?? []
+    const next = cur.includes(val) ? cur.filter(v => v !== val) : [...cur, val]
+    return { ...a, [id]: next }
+  })
+
+  const handleSubmit = async () => {
+    setSubmitting(true)
+    try {
+      await fetch(PRESAVE_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ type: 'survey', nombre, email, pais, ...answers }),
+      })
+    } catch { /* best-effort */ }
+    setDone(true); setSubmitting(false)
+  }
+
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', fn)
+    return () => window.removeEventListener('keydown', fn)
+  }, [onClose])
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  const inputBase: React.CSSProperties = {
+    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(201,169,110,0.25)',
+    color: '#f5f0e8', fontFamily: 'var(--font-sans)', fontSize: '14px',
+    padding: '13px 16px', outline: 'none', width: '100%', boxSizing: 'border-box',
+  }
+
+  const nextBtnStyle = (enabled: boolean): React.CSSProperties => ({
+    flex: step > 0 || isInfoStep ? 2 : 1,
+    background: enabled ? '#c9a96e' : 'rgba(201,169,110,0.18)',
+    color: enabled ? '#000' : 'rgba(0,0,0,0.3)',
+    border: 'none', fontFamily: 'var(--font-sans)', fontSize: '11px',
+    fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase' as const,
+    padding: '16px', cursor: enabled ? 'pointer' : 'default', transition: 'all 0.2s',
+  })
+
+  const backBtnStyle: React.CSSProperties = {
+    flex: 1, background: 'none', border: '1px solid rgba(201,169,110,0.2)',
+    color: 'rgba(201,169,110,0.7)', fontFamily: 'var(--font-sans)', fontSize: '11px',
+    letterSpacing: '0.18em', textTransform: 'uppercase', padding: '16px', cursor: 'pointer',
+  }
+
+  return (
+    <div
+      style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div style={{ background: '#0a0a0a', border: '1px solid rgba(201,169,110,0.22)', width: '100%', maxWidth: '520px', maxHeight: '92vh', overflowY: 'auto', position: 'relative', padding: 'clamp(28px, 5vw, 44px)', paddingTop: '18px' }}>
+        {/* Corner ornaments */}
+        {([
+          { top: 8, left: 8, borderTop: '1px solid rgba(201,169,110,0.35)', borderLeft: '1px solid rgba(201,169,110,0.35)' },
+          { top: 8, right: 8, borderTop: '1px solid rgba(201,169,110,0.35)', borderRight: '1px solid rgba(201,169,110,0.35)' },
+          { bottom: 8, left: 8, borderBottom: '1px solid rgba(201,169,110,0.35)', borderLeft: '1px solid rgba(201,169,110,0.35)' },
+          { bottom: 8, right: 8, borderBottom: '1px solid rgba(201,169,110,0.35)', borderRight: '1px solid rgba(201,169,110,0.35)' },
+        ] as React.CSSProperties[]).map((s, i) => (
+          <div key={i} style={{ position: 'absolute', width: 14, height: 14, ...s }} />
+        ))}
+
+        {/* Close */}
+        <button onClick={onClose} style={{ position: 'absolute', top: 12, right: 12, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(245,240,232,0.35)', fontSize: '22px', lineHeight: 1, padding: '4px 8px' }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'rgba(245,240,232,0.8)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(245,240,232,0.35)')}
+        >×</button>
+
+        {/* Progress bar */}
+        {!done && (
+          <div style={{ marginBottom: '24px', marginTop: '8px' }}>
+            <div style={{ height: '2px', background: 'rgba(201,169,110,0.12)', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${(step / SURVEY_STEPS) * 100}%`, background: '#c9a96e', transition: 'width 0.4s ease' }} />
+            </div>
+            <div style={{ marginTop: '7px', fontFamily: 'var(--font-sans)', color: 'rgba(201,169,110,0.55)', fontSize: '10px', letterSpacing: '0.2em', textAlign: 'right' }}>
+              {isInfoStep ? 'ÚLTIMO PASO' : `${step + 1} / ${SURVEY_QS.length}`}
+            </div>
+          </div>
+        )}
+
+        {/* Animated content */}
+        <div style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateX(0)' : `translateX(${dir * 18}px)`, transition: 'opacity 0.22s ease, transform 0.22s ease' }}>
+
+          {done ? (
+            /* ── Download ── */
+            <div style={{ textAlign: 'center', padding: '12px 0 8px' }}>
+              <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '18px' }}>✦ &nbsp; Gracias &nbsp; ✦</div>
+              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 700, lineHeight: 1.25, marginBottom: '12px' }}>Tu libro está listo.</h2>
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: '14px', lineHeight: 1.6, maxWidth: '360px', margin: '0 auto 32px' }}>
+                Descárgalo ahora y empieza cuando quieras.<br />Es tuyo.
+              </p>
+              <a
+                href="/ebook.pdf"
+                download="Cuando-Dios-se-siente-lejos.pdf"
+                style={{ display: 'block', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box', marginBottom: '20px' }}
+              >
+                ↓ Descargar aquí el libro gratis
+              </a>
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px', lineHeight: 1.6, textAlign: 'center', margin: 0 }}>
+                Si no puedes descargarlo, escríbeme por privado en Instagram:{' '}
+                <a href="https://instagram.com/joelblancosierra" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(201,169,110,0.7)', textDecoration: 'none' }}>
+                  @joelblancosierra
+                </a>
+              </p>
+            </div>
+
+          ) : isInfoStep ? (
+            /* ── Personal info ── */
+            <div>
+              <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '14px' }}>✦ &nbsp; Casi listo &nbsp; ✦</div>
+              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3.2vw, 24px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '22px' }}>
+                Una última cosa antes de darte el libro.
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
+                <input type="text" placeholder="Tu nombre" value={nombre} onChange={e => setNombre(e.target.value)} required style={inputBase} />
+                <input type="email" placeholder="Tu correo electrónico" value={email} onChange={e => setEmail(e.target.value)} required style={inputBase} />
+                <input type="text" placeholder="Tu país" value={pais} onChange={e => setPais(e.target.value)} required style={inputBase} />
+                {[
+                  { v: mayor18, set: setMayor18, label: 'Confirmo que soy mayor de 18 años.' },
+                  { v: consent, set: setConsent, label: 'Acepto que mis respuestas se usen de forma anónima para mejorar el contenido. No se compartirán con terceros.' },
+                ].map(({ v, set, label }, i) => (
+                  <label key={i} onClick={() => set(!v)} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', cursor: 'pointer', marginTop: '4px' }}>
+                    <div style={{ flexShrink: 0, marginTop: '2px', width: '17px', height: '17px', border: `1px solid ${v ? 'rgba(201,169,110,0.8)' : 'rgba(201,169,110,0.3)'}`, background: v ? 'rgba(201,169,110,0.15)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}>
+                      {v && <svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="#c9a96e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                    </div>
+                    <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.52)', fontSize: '12px', lineHeight: 1.55 }}>{label}</span>
+                  </label>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: '11px', marginTop: '22px' }}>
+                <button onClick={() => animate(-1, () => setStep(s => s - 1))} style={backBtnStyle}>Atrás</button>
+                <button onClick={handleSubmit} disabled={!canContinue() || submitting} style={nextBtnStyle(canContinue() && !submitting)}>
+                  {submitting ? 'Desbloqueando acceso…' : 'Obtener mi libro gratis →'}
+                </button>
+              </div>
+            </div>
+
+          ) : (
+            /* ── Question ── */
+            <div>
+              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3.2vw, 24px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '22px', whiteSpace: 'pre-line' }}>
+                {q.q}
+              </h2>
+              {q.type === 'text' ? (
+                <textarea
+                  placeholder="Escribe aquí (opcional)"
+                  value={(answers[q.id] as string) ?? ''}
+                  onChange={e => setSingle(q.id, e.target.value)}
+                  style={{ ...inputBase, height: '100px', resize: 'none' }}
+                />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
+                  {q.opts!.map(opt => {
+                    const sel = q.type === 'multi'
+                      ? ((answers[q.id] as string[] | undefined) ?? []).includes(opt)
+                      : answers[q.id] === opt
+                    return (
+                      <button
+                        key={opt}
+                        onClick={() => q.type === 'multi' ? toggleMulti(q.id, opt) : setSingle(q.id, opt)}
+                        style={{ textAlign: 'left', background: sel ? 'rgba(201,169,110,0.1)' : 'rgba(255,255,255,0.03)', border: `1px solid ${sel ? 'rgba(201,169,110,0.7)' : 'rgba(201,169,110,0.18)'}`, color: sel ? '#f5f0e8' : 'rgba(245,240,232,0.6)', fontFamily: 'var(--font-sans)', fontSize: '14px', lineHeight: 1.4, padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', transition: 'all 0.15s', width: '100%' }}
+                      >
+                        <div style={{ flexShrink: 0, width: q.type === 'multi' ? '15px' : '13px', height: q.type === 'multi' ? '15px' : '13px', borderRadius: q.type === 'multi' ? '2px' : '50%', border: `1px solid ${sel ? '#c9a96e' : 'rgba(201,169,110,0.35)'}`, background: sel ? '#c9a96e' : 'transparent', transition: 'all 0.15s' }} />
+                        {opt}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: '11px', marginTop: '22px' }}>
+                {step > 0 && <button onClick={() => animate(-1, () => setStep(s => s - 1))} style={backBtnStyle}>Atrás</button>}
+                <button onClick={() => animate(1, () => setStep(s => s + 1))} disabled={!canContinue()} style={nextBtnStyle(canContinue())}>
+                  {q.type === 'text' && q.optional && !answers[q.id] ? 'Saltar →' : 'Siguiente →'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Offer section ──────────────────────────────────────────────────────────
 function OfferSection() {
   const ref = useRef<HTMLDivElement>(null)
@@ -694,25 +934,7 @@ function OfferSection() {
     return () => obs.disconnect()
   }, [])
 
-  const [nombre, setNombre] = useState('')
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
-
-  const handleSubmit = async (ev: React.FormEvent) => {
-    ev.preventDefault()
-    setStatus('sending')
-    try {
-      await fetch(PRESAVE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ nombre, email }),
-      })
-      setStatus('sent')
-    } catch {
-      setStatus('error')
-    }
-  }
+  const [showSurvey, setShowSurvey] = useState(false)
 
   return (
     <div id="presave" ref={ref} style={{ background: '#000', position: 'relative', paddingTop: '24px', paddingBottom: '80px' }}>
@@ -754,85 +976,52 @@ function OfferSection() {
               <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
 
-            {/* Presave form */}
+            {/* Right side: price + CTAs */}
             <div style={{ flex: '1 1 240px', minWidth: '220px', textAlign: 'left' }}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '8px' }}>
-              Esto no es para todos. Es para quien lo necesita de verdad.
-            </h2>
-            <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(13px, 1.6vw, 15px)', lineHeight: 1.6, margin: '16px 0 24px' }}>
-              Déjanos tu email. Te avisaremos el día que salga.
-            </p>
+              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '20px' }}>
+                Esto no es para todos. Es para quien lo necesita de verdad.
+              </h2>
 
-            {status === 'sent' ? (
-              <p style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 700 }}>
-                ¡Listo! Te avisaremos en cuanto esté disponible.
+              {/* Price */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '20px' }}>
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(36px, 7vw, 52px)', fontWeight: 700, lineHeight: 1 }}>14,99 €</span>
+                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px', letterSpacing: '0.1em' }}>PDF · descarga inmediata</span>
+              </div>
+
+              {/* Buy button */}
+              <a
+                href="#comprar"
+                style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', textDecoration: 'none', textAlign: 'center', marginBottom: '20px', transition: 'background 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#d4b87a')}
+                onMouseLeave={e => (e.currentTarget.style.background = '#c9a96e')}
+              >
+                Quiero el mío →
+              </a>
+
+              {/* Free divider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
+                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(201,169,110,0.4)', fontSize: '10px', letterSpacing: '0.18em' }}>O</span>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
+              </div>
+
+              {/* Free CTA */}
+              <button
+                onClick={() => setShowSurvey(true)}
+                style={{ display: 'block', width: '100%', background: 'transparent', color: 'rgba(201,169,110,0.85)', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '15px 24px', border: '1px solid rgba(201,169,110,0.35)', cursor: 'pointer', marginBottom: '10px', transition: 'border-color 0.2s, color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.7)'; e.currentTarget.style.color = '#c9a96e' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.35)'; e.currentTarget.style.color = 'rgba(201,169,110,0.85)' }}
+              >
+                Lo quiero gratis
+              </button>
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.28)', fontSize: '11px', lineHeight: 1.5, margin: 0, textAlign: 'center' }}>
+                Responde 8 preguntas breves para obtenerlo gratis
               </p>
-            ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <input
-                  type="text"
-                  required
-                  placeholder="Tu nombre"
-                  value={nombre}
-                  onChange={e => setNombre(e.target.value)}
-                  style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    color: '#f5f0e8',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '14px',
-                    padding: '14px 16px',
-                    outline: 'none',
-                  }}
-                />
-                <input
-                  type="email"
-                  required
-                  placeholder="Tu correo"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    color: '#f5f0e8',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '14px',
-                    padding: '14px 16px',
-                    outline: 'none',
-                  }}
-                />
-                <button
-                  type="submit"
-                  disabled={status === 'sending'}
-                  style={{
-                    display: 'block',
-                    background: '#c9a96e',
-                    color: '#000',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    letterSpacing: '0.22em',
-                    textTransform: 'uppercase',
-                    padding: '17px 24px',
-                    border: 'none',
-                    cursor: status === 'sending' ? 'default' : 'pointer',
-                    opacity: status === 'sending' ? 0.6 : 1,
-                    marginTop: '4px',
-                  }}
-                >
-                  {status === 'sending' ? 'Enviando…' : 'Avísame cuando salga'}
-                </button>
-                {status === 'error' && (
-                  <p style={{ fontFamily: 'var(--font-sans)', color: '#e08080', fontSize: '12px' }}>
-                    No se pudo enviar, inténtalo de nuevo.
-                  </p>
-                )}
-              </form>
-            )}
             </div>
           </div>
         </div>
       </div>
+      {showSurvey && <SurveyModal onClose={() => setShowSurvey(false)} />}
     </div>
   )
 }
