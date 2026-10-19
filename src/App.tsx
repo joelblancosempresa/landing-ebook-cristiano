@@ -362,7 +362,7 @@ function HeroSection() {
   // diagonal — they should appear, not already be sitting there. They also
   // start small and grow to full size as you keep scrolling, then shrink back
   // away as the book turns off toward the phone.
-  const cardsGrow = windowT(progress, CLOSE_END + 20 / WRAPPER_ACTIVE_VH, CLOSE_END + 45 / WRAPPER_ACTIVE_VH)
+  const cardsGrow = windowT(progress, CLOSE_TILT_START, CLOSE_END)
   const cardsShrink = windowT(progress, CARDS_SHRINK_START, CARDS_GONE)
   const cardsOpacity = cardsGrow * (1 - cardsShrink)
   const cardsScale = lerp(0.78, 1, cardsGrow) * lerp(1, 0.3, cardsShrink)
@@ -478,7 +478,7 @@ function HeroSection() {
       {/* "Cómo funciona" copy — same idea: rises from below right as the pop-ups
           shrink away, while the book turns and shrinks off toward the phone —
           passes behind it as you keep scrolling, never disappearing. */}
-      <div style={{ position: 'absolute', top: '385vh', left: 0, right: 0, textAlign: 'center', padding: '0 24px', zIndex: 1 }}>
+      <div style={{ position: 'absolute', top: '360vh', left: 0, right: 0, textAlign: 'center', padding: '0 24px', zIndex: 1 }}>
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '18px', opacity: 0.8 }}>
             ✦ &nbsp; Cómo funciona &nbsp; ✦
