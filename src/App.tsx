@@ -24,7 +24,7 @@ const PRESAVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBaI_X_uyEG
 // centered ON the box's left/right boundary (not flush outside it) and spun
 // around their OWN center — so after rotating they land at that same ±D/2
 // span instead of drifting off by D/2, which is what caused the gaps.
-const BOOK_DEPTH = 20 // px
+const BOOK_DEPTH = 4 // px
 
 // Capped well short of fully open (1) — just enough for the cover to swing
 // clear of the índice on the right page, with the left page barely cracked.
@@ -78,7 +78,7 @@ function Book3D({ openT = 0 }: { openT?: number }) {
           surface that ever paints the calendar or índice — fixed here, it
           never jumps to the cover or anywhere else. Left: calendar. Right:
           índice. */}
-      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, ...INDICE_FACE_STYLE, width: '100%', boxShadow: 'inset 18px 0 28px rgba(0,0,0,0.28)' }} />
+      <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${half - 1}px)`, ...INDICE_FACE_STYLE, width: '100%' }} />
 
       {/* Front cover — hinged flap: portada outside, plain inside. */}
       <div
@@ -91,7 +91,7 @@ function Book3D({ openT = 0 }: { openT?: number }) {
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', ...CALENDAR_FACE_STYLE, width: '100%', boxShadow: 'inset 18px 0 28px rgba(0,0,0,0.28)' }} />
+        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', ...CALENDAR_FACE_STYLE, width: '100%' }} />
       </div>
 
       {/* Back cover */}
