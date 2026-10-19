@@ -205,9 +205,9 @@ const CLOSE_END = 240 / WRAPPER_ACTIVE_VH        // fully closed and settled at 
 // it fades in pinned in front of the book (higher z-index), stays fixed on
 // screen for the whole page-flip run, and only moves once the sticky box
 // itself releases — i.e. once all pages have finished flipping.
-const CARDS_SHRINK_START = 272 / WRAPPER_ACTIVE_VH
-const CARDS_GONE = 297 / WRAPPER_ACTIVE_VH
-const PHONE_ENTER_END = 375 / WRAPPER_ACTIVE_VH  // book fully shrunk away, phone fully revealed
+const CARDS_SHRINK_START = 305 / WRAPPER_ACTIVE_VH
+const CARDS_GONE = 348 / WRAPPER_ACTIVE_VH
+const PHONE_ENTER_END = 400 / WRAPPER_ACTIVE_VH  // book fully shrunk away, phone fully revealed
 const PAGE_FLIP_END = 450 / WRAPPER_ACTIVE_VH    // lock-screen swipe-up runs from PHONE_ENTER_END to here
 
 // Subtle interactive parallax — mouse on desktop, device tilt on mobile.
@@ -362,10 +362,11 @@ function HeroSection() {
   // diagonal — they should appear, not already be sitting there. They also
   // start small and grow to full size as you keep scrolling, then shrink back
   // away as the book turns off toward the phone.
-  const cardsGrow = windowT(progress, CLOSE_END, CLOSE_END + 8 / WRAPPER_ACTIVE_VH)
+  const cardsGrow = windowT(progress, CLOSE_END, CLOSE_END + 25 / WRAPPER_ACTIVE_VH)
   const cardsShrink = windowT(progress, CARDS_SHRINK_START, CARDS_GONE)
   const cardsOpacity = cardsGrow * (1 - cardsShrink)
-  const cardsScale = lerp(0.4, 1, cardsGrow) * lerp(1, 0.3, cardsShrink)
+  const cardsScale = lerp(0.78, 1, cardsGrow) * lerp(1, 0.3, cardsShrink)
+  const cardsSlideY = lerp(-18, 0, cardsGrow)
 
   // Once the pop-ups are gone, the book spins once more and shrinks + fades
   // away — "into" the phone, which sits pinned in front of it (higher
@@ -518,7 +519,7 @@ function HeroSection() {
             covering it; fixed with the book, fade in and grow from small to
             full size only once it settles diagonal */}
         <div style={{ position: 'absolute', top: '12%', left: 0, right: 0, zIndex: 6, padding: '0 12px', opacity: cardsOpacity }}>
-          <div style={{ position: 'relative', width: 'min(98%, 460px)', height: 'clamp(240px, 44vh, 320px)', margin: '0 auto', transform: `scale(${cardsScale})` }}>
+          <div style={{ position: 'relative', width: 'min(98%, 460px)', height: 'clamp(240px, 44vh, 320px)', margin: '0 auto', transform: `scale(${cardsScale}) translateY(${cardsSlideY}px)` }}>
             {FACT_CARDS.map((card, i) => (
               <div
                 key={card.title}
