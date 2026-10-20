@@ -935,6 +935,24 @@ function OfferSection() {
   }, [])
 
   const [showSurvey, setShowSurvey] = useState(false)
+  const [presaveEmail, setPresaveEmail] = useState('')
+  const [presaveStatus, setPresaveStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
+
+  const handlePresave = async () => {
+    if (!presaveEmail) return
+    setPresaveStatus('sending')
+    try {
+      await fetch(PRESAVE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'presave', email: presaveEmail }),
+      })
+      setPresaveStatus('done')
+    } catch {
+      setPresaveStatus('error')
+    }
+  }
 
   return (
     <div id="presave" ref={ref} style={{ background: '#000', position: 'relative', paddingTop: '24px', paddingBottom: '80px' }}>
@@ -982,21 +1000,38 @@ function OfferSection() {
                 Esto no es para todos. Es para quien lo necesita de verdad.
               </h2>
 
-              {/* Price */}
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '20px' }}>
-                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(36px, 7vw, 52px)', fontWeight: 700, lineHeight: 1 }}>14,99 €</span>
-                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px', letterSpacing: '0.1em' }}>PDF · descarga inmediata</span>
-              </div>
-
-              {/* Buy button */}
-              <a
-                href="#comprar"
-                style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', textDecoration: 'none', textAlign: 'center', marginBottom: '20px', transition: 'background 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#d4b87a')}
-                onMouseLeave={e => (e.currentTarget.style.background = '#c9a96e')}
-              >
-                Quiero el mío →
-              </a>
+              {/* Presave form — TEMPORAL hasta tener el PDF y link de pago */}
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.6)', fontSize: '13px', lineHeight: 1.6, marginBottom: '18px' }}>
+                El libro sale en unos días. Déjame tu correo y te aviso en cuanto esté disponible.
+              </p>
+              {presaveStatus === 'done' ? (
+                <p style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '15px', fontStyle: 'italic', marginBottom: '20px' }}>
+                  ✓ Te avisaré en cuanto esté listo.
+                </p>
+              ) : (
+                <div style={{ marginBottom: '20px' }}>
+                  <input
+                    type="email"
+                    placeholder="Tu correo electrónico"
+                    value={presaveEmail}
+                    onChange={e => setPresaveEmail(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') handlePresave() }}
+                    style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: 'rgba(245,240,232,0.05)', border: '1px solid rgba(201,169,110,0.3)', color: '#f5f0e8', fontFamily: 'var(--font-sans)', fontSize: '14px', padding: '14px 16px', marginBottom: '10px', outline: 'none' }}
+                  />
+                  <button
+                    onClick={handlePresave}
+                    disabled={!presaveEmail || presaveStatus === 'sending'}
+                    style={{ display: 'block', width: '100%', background: presaveEmail ? '#c9a96e' : 'rgba(201,169,110,0.3)', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', border: 'none', cursor: presaveEmail ? 'pointer' : 'default', transition: 'background 0.2s' }}
+                  >
+                    {presaveStatus === 'sending' ? 'Guardando…' : 'Avísame cuando salga →'}
+                  </button>
+                  {presaveStatus === 'error' && (
+                    <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(255,100,100,0.7)', fontSize: '12px', marginTop: '8px' }}>
+                      Algo ha fallado. Inténtalo de nuevo.
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Free divider */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
