@@ -128,38 +128,38 @@ function Book3D({ openT = 0 }: { openT?: number }) {
 const TEXT_BLOCKS = [
   {
     side: 'left' as const,
-    text: 'Hubo un tiempo en que orar no te costaba. Abrías la Biblia y algo dentro de ti se movía. Sentías a Dios cerca sin esforzarte en sentirlo.',
+    text: 'Oras y no pasa nada. Abres la Biblia y la cierras igual que la abriste. Sigues creyendo, pero hace tiempo que no sientes que Dios te hable. Y no se lo has contado a nadie.',
   },
   {
     side: 'right' as const,
-    text: 'No estás solo en esto.\nElías pidió morirse después de su mayor victoria.\nDavid le preguntó a Dios: "¿Me olvidarás para siempre?"\nLos discípulos le gritaron a Jesús en la tormenta: "¿No te importa?"\nHabacuc le preguntó a Dios hasta cuándo iba a clamar sin que le escuchara.\nAsaf llegó a preguntarse si Dios se había olvidado de tener misericordia.',
+    text: 'No eres el primero.\nElías pidió morirse después de su mayor victoria.\nDavid le preguntó a Dios: "¿Me olvidarás para siempre?"\nLos discípulos le gritaron a Jesús en la tormenta: "¿No te importa?"\nHabacuc le preguntó a Dios hasta cuándo iba a clamar sin que le escuchara.\nAsaf llegó a preguntarse si Dios se había olvidado de tener misericordia.',
   },
   {
     side: 'left' as const,
-    text: 'Tu distancia con Dios tampoco es el final de la historia. Es la parte que nadie te enseñó a atravesar.',
+    text: 'La Biblia no esconde esta parte. Y tampoco te deja ahí.',
   },
 ]
 
 const HOW_IT_WORKS_STEPS = [
   {
-    title: 'Lee la Palabra',
-    text: 'Cada día empieza con la Biblia: el pasaje entero, antes que cualquier opinión.',
+    title: 'Lee',
+    text: 'El texto de la Biblia, al principio de la página. Primero lo que dice Dios; después, todo lo demás.',
   },
   {
-    title: 'Entiende el contexto',
-    text: 'Qué estaba pasando cuando se escribió y qué significa para ti hoy. Sin sacarlo de su sitio.',
+    title: 'Entiende',
+    text: 'Qué estaba pasando, a quién se le dijo y qué cambia para ti hoy.',
   },
   {
-    title: 'Una conversación real',
-    text: 'Un paso práctico de 5 minutos y una oración que terminas con tus propias palabras.',
+    title: 'Haz y ora',
+    text: 'Un paso de cinco minutos para hoy y una oración que terminas tú con tus palabras.',
   },
 ]
 
 // Pop-up fact cards shown once the (single, persistent) book closes and settles
 const FACT_CARDS = [
-  { title: '7 días', text: 'Cinco minutos al día. Se termina de verdad.' },
-  { title: '7 pasajes de la Biblia', text: 'Escritos enteros, para que leas primero lo que dice Dios.' },
-  { title: '7 pasos prácticos', text: 'Una sola cosa por día. Sin agobios, sin culpa.' },
+  { title: '5 minutos', text: 'Lo lees antes de abrir Instagram.' },
+  { title: '7 pasajes', text: 'De Mateo, Marcos, Lucas, Juan y los Salmos.' },
+  { title: 'Gratis', text: 'Solo te pido un minuto de preguntas.' },
 ]
 
 // Day titles flipped through rapidly once the book has "entered" the phone
@@ -287,7 +287,7 @@ function Header() {
           padding: '9px 20px', borderRadius: '999px', textDecoration: 'none',
         }}
       >
-        Quiero el mío
+        Descárgalo gratis
       </a>
     </div>
   )
@@ -405,10 +405,10 @@ function HeroSection() {
       {/* Eyebrow + subtitle — ordinary scrolling content */}
       <div style={{ position: 'absolute', top: '4vh', left: 0, right: 0, textAlign: 'center', padding: '0 24px', zIndex: 4 }}>
         <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', opacity: 0.8, marginBottom: '8px' }}>
-          ✦ &nbsp; Ebook Devocional &nbsp; ✦
+          ✦ &nbsp; Devocional gratuito · 7 días &nbsp; ✦
         </div>
         <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.55)', fontSize: 'clamp(12px, 1.5vw, 15px)', fontWeight: 300, maxWidth: '440px', margin: '0 auto', lineHeight: 1.5 }}>
-          Un devocional para quien siente que Dios está ahí, pero lejos
+          Para cuando oras y sientes que hablas solo.
         </p>
       </div>
 
@@ -430,6 +430,9 @@ function HeroSection() {
           }}>
             <em style={{ color: '#c9a96e', fontStyle: 'italic' }}>la voz de Dios</em>
           </h1>
+          <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.4)', fontSize: 'clamp(11px, 1.3vw, 13px)', fontWeight: 300, marginTop: '10px', letterSpacing: '0.04em' }}>
+            Cinco minutos al día, con la Biblia abierta.
+          </p>
         </div>
       </div>
 
@@ -465,10 +468,8 @@ function HeroSection() {
             No tienes que sentir la fe para volver a practicarla.
           </h2>
           <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(12px, 1.5vw, 15px)', fontWeight: 300, maxWidth: '480px', margin: '0 auto', lineHeight: 1.6 }}>
-            El pasaje de la Biblia, escrito entero.<br />
-            Qué estaba pasando cuando se escribió.<br />
-            Y algo concreto que hacer ese día.<br />
-            Sin sermones. Sin culpa.
+            Cada día lees un pasaje de la Biblia, entiendes qué estaba pasando cuando se escribió y haces una sola cosa ese mismo día.<br />
+            Cinco minutos. Sin sermones y sin culpa.
           </p>
         </div>
       </div>
@@ -482,7 +483,7 @@ function HeroSection() {
             ✦ &nbsp; Cómo funciona &nbsp; ✦
           </div>
           <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(24px, 4vw, 38px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '40px' }}>
-            3 pasos para volver a escuchar a Dios
+            Así es cada día
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', textAlign: 'left' }}>
             {HOW_IT_WORKS_STEPS.map((step, i) => (
@@ -823,18 +824,37 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
           {done ? (
             /* ── Download ── */
             <div style={{ textAlign: 'center', padding: '12px 0 8px' }}>
-              <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '18px' }}>✦ &nbsp; Gracias &nbsp; ✦</div>
-              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 700, lineHeight: 1.25, marginBottom: '12px' }}>Tu libro está listo.</h2>
+              <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '18px' }}>✦ &nbsp; Ya es tuyo &nbsp; ✦</div>
+              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 700, lineHeight: 1.25, marginBottom: '12px' }}>Tu devocional está listo.</h2>
               <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: '14px', lineHeight: 1.6, maxWidth: '360px', margin: '0 auto 32px' }}>
-                Descárgalo ahora y empieza cuando quieras.<br />Es tuyo.
+                Léelo mañana nada más despertarte, antes de abrir ninguna app. Ese es el primer paso.
               </p>
               <a
                 href="/ebook.pdf"
                 download="Cuando-Dios-se-siente-lejos.pdf"
                 style={{ display: 'block', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box', marginBottom: '20px' }}
               >
-                ↓ Descargar aquí el libro gratis
+                ↓ Descargar el devocional
               </a>
+
+              {/* FocusGod block */}
+              <div style={{ borderTop: '1px solid rgba(201,169,110,0.12)', paddingTop: '20px', marginBottom: '16px' }}>
+                <p style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(14px, 2vw, 16px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '8px' }}>
+                  Si el móvil te gana cada mañana
+                </p>
+                <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: '13px', lineHeight: 1.6, marginBottom: '14px' }}>
+                  FocusGod bloquea Instagram y TikTok hasta que has pasado tu rato con Dios. Yo la uso cada día.
+                </p>
+                <a
+                  href="https://apps.apple.com/app/focusgod"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'block', background: 'transparent', border: '1px solid rgba(201,169,110,0.35)', color: 'rgba(201,169,110,0.85)', fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '14px', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}
+                >
+                  Ver FocusGod en la App Store
+                </a>
+              </div>
+
               <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px', lineHeight: 1.6, textAlign: 'center', margin: 0 }}>
                 Si no puedes descargarlo, escríbeme por privado en Instagram:{' '}
                 <a href="https://instagram.com/joelblancosierra" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(201,169,110,0.7)', textDecoration: 'none' }}>
@@ -848,7 +868,7 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
             <div>
               <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '14px' }}>✦ &nbsp; Casi listo &nbsp; ✦</div>
               <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3.2vw, 24px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '22px' }}>
-                Una última cosa antes de darte el libro.
+                Último paso. Dime dónde te lo envío.
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
                 <input type="text" placeholder="Tu nombre" value={nombre} onChange={e => setNombre(e.target.value)} required style={inputBase} />
@@ -856,7 +876,7 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
                 <input type="text" placeholder="Tu país" value={pais} onChange={e => setPais(e.target.value)} required style={inputBase} />
                 {[
                   { v: mayor18, set: setMayor18, label: 'Confirmo que soy mayor de 18 años.' },
-                  { v: consent, set: setConsent, label: 'Acepto que mis respuestas se usen de forma anónima para mejorar el contenido. No se compartirán con terceros.' },
+                  { v: consent, set: setConsent, label: 'Acepto que se guarden mis respuestas, incluidas las que hablan de mi fe, y mi correo para enviarme el devocional y contenido relacionado. Puedo darme de baja cuando quiera.' },
                 ].map(({ v, set, label }, i) => (
                   <label key={i} onClick={() => set(!v)} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', cursor: 'pointer', marginTop: '4px' }}>
                     <div style={{ flexShrink: 0, marginTop: '2px', width: '17px', height: '17px', border: `1px solid ${v ? 'rgba(201,169,110,0.8)' : 'rgba(201,169,110,0.3)'}`, background: v ? 'rgba(201,169,110,0.15)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}>
@@ -869,7 +889,7 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
               <div style={{ display: 'flex', gap: '11px', marginTop: '22px' }}>
                 <button onClick={() => animate(-1, () => setStep(s => s - 1))} style={backBtnStyle}>Atrás</button>
                 <button onClick={handleSubmit} disabled={!canContinue() || submitting} style={nextBtnStyle(canContinue() && !submitting)}>
-                  {submitting ? 'Desbloqueando acceso…' : 'Obtener mi libro gratis →'}
+                  {submitting ? 'Enviando…' : 'Enviarme el devocional →'}
                 </button>
               </div>
             </div>
@@ -995,12 +1015,12 @@ function OfferSection() {
             {/* Right side: price + CTAs */}
             <div style={{ flex: '1 1 240px', minWidth: '220px', textAlign: 'left' }}>
               <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '20px' }}>
-                Esto no es para todos. Es para quien lo necesita de verdad.
+                Es gratis. Solo te pido un minuto.
               </h2>
 
               {/* Presave form — TEMPORAL hasta tener el PDF y link de pago */}
               <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.6)', fontSize: '13px', lineHeight: 1.6, marginBottom: '18px' }}>
-                El libro sale en unos días. Déjame tu correo y te aviso en cuanto esté disponible.
+                Responde unas preguntas cortas sobre tu vida con Dios y te lo envío al momento. Tus respuestas me ayudan a saber qué necesitas y a hacer mejores recursos.
               </p>
               {presaveStatus === 'done' ? (
                 <p style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '15px', fontStyle: 'italic', marginBottom: '20px' }}>
@@ -1021,7 +1041,7 @@ function OfferSection() {
                     disabled={!presaveEmail || presaveStatus === 'sending'}
                     style={{ display: 'block', width: '100%', background: presaveEmail ? '#c9a96e' : 'rgba(201,169,110,0.3)', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', border: 'none', cursor: presaveEmail ? 'pointer' : 'default', transition: 'background 0.2s' }}
                   >
-                    {presaveStatus === 'sending' ? 'Guardando…' : 'Avísame cuando salga →'}
+                    {presaveStatus === 'sending' ? 'Guardando…' : 'Quiero el devocional gratis →'}
                   </button>
                   {presaveStatus === 'error' && (
                     <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(255,100,100,0.7)', fontSize: '12px', marginTop: '8px' }}>
@@ -1094,10 +1114,10 @@ function AuthorSection() {
             @joelblancosierra
           </div>
           <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(245,240,232,0.55)', fontSize: 'clamp(14px, 1.5vw, 16px)', lineHeight: 1.9, fontStyle: 'italic', maxWidth: '480px', margin: '0 auto', textAlign: 'left' }}>
-            Escribí este libro para ti.<br /><br />
-            Para el que extraña a Dios. Para el que lo siente lejos sin entender por qué. Para el que un día tuvo una fe que lo movía todo y ya no sabe dónde se fue. Para el que ora, pero siente que sus palabras no llegan a ningún lado. Para el que abre la Biblia y la cierra sin haber encontrado nada. Para el que sigue creyendo, pero lleva demasiado tiempo sin escucharle de verdad.<br /><br />
-            Porque a veces no es que te hayas alejado. Es que la vida fue ocupando el espacio que antes era suyo. El trabajo, las preocupaciones, el ruido. Y un día te das cuenta de que hace meses que no le hablas como antes.<br /><br />
-            Yo también lo viví. Y porque sé lo que se siente, escribí este libro. Para que puedas volver a escuchar a Dios. Para que vuelvas a reconocer su voz.
+            Escribí esto para ti.<br /><br />
+            Si un día oraste con ganas y ahora te cuesta, o si nunca has sentido a Dios cerca y te gustaría, este devocional es para ti.<br /><br />
+            No vas a encontrar fórmulas. Vas a encontrar la Biblia: lo que dice cuando Dios se siente lejos y por dónde empezar a volver.<br /><br />
+            Yo empiezo cada mañana con mi rato con Dios antes de abrir ninguna red social. Es lo que te propongo durante estos 7 días.
           </p>
           <p style={{ fontFamily: 'var(--font-serif)', color: 'rgba(201,169,110,0.7)', fontSize: 'clamp(14px, 1.5vw, 16px)', marginTop: '24px', fontStyle: 'italic' }}>
             — Joel
@@ -1150,29 +1170,34 @@ export default function App() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
             {[
-              { n: 1, title: 'Por qué Dios se siente lejos' },
-              { n: 2, title: 'Cómo habla Dios' },
-              { n: 3, title: 'Lo que ahoga la Palabra' },
-              { n: 4, title: 'Marta y María' },
-              { n: 5, title: 'Tu lugar y tu hora' },
-              { n: 6, title: 'El día que fallas' },
-              { n: 7, title: 'Sigue caminando' },
-            ].map(({ n, title }, i) => (
+              { n: 1, title: 'Por qué Dios se siente lejos', desc: 'La Biblia da más de una razón. Aprende a distinguirlas.' },
+              { n: 2, title: 'Cómo habla Dios', desc: 'Un método sencillo para escucharle en su Palabra. Lo usarás el resto de días.' },
+              { n: 3, title: 'Lo que ahoga la Palabra', desc: 'Jesús lo explicó en una parábola. Hoy le pones número a tu ruido.' },
+              { n: 4, title: 'Marta y María', desc: 'Estar ocupado con cosas buenas también puede dejarte sin escuchar.' },
+              { n: 5, title: 'Tu lugar y tu hora', desc: 'Jesús dijo "cierra la puerta". Hoy decides cuál es la tuya.' },
+              { n: 6, title: 'El día que fallas', desc: 'Qué hacer cuando la fuerza de voluntad no basta.' },
+              { n: 7, title: 'Sigue caminando', desc: 'Cómo seguir el día 8, cuando se acabe el libro.' },
+            ].map(({ n, title, desc }, i) => (
               <div
                 key={n}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '20px',
+                  display: 'flex', alignItems: 'flex-start', gap: '20px',
                   padding: '16px 0',
                   borderBottom: i < 6 ? '1px solid rgba(201,169,110,0.08)' : 'none',
                   textAlign: 'left',
                 }}
               >
-                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(13px, 1.6vw, 15px)', fontWeight: 700, opacity: 0.7, minWidth: '36px', flexShrink: 0 }}>
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(13px, 1.6vw, 15px)', fontWeight: 700, opacity: 0.7, minWidth: '36px', flexShrink: 0, paddingTop: '2px' }}>
                   Día {n}
                 </span>
-                <span style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 700, lineHeight: 1.3 }}>
-                  {title}
-                </span>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(15px, 2vw, 17px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '3px' }}>
+                    {title}
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.42)', fontSize: 'clamp(11px, 1.3vw, 13px)', lineHeight: 1.5 }}>
+                    {desc}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
