@@ -604,11 +604,10 @@ function HeroSection() {
               position: 'absolute', inset: 0, overflow: 'hidden',
               transform: `translateY(${-lockSlide * 105}%)`,
             }}>
-              {/* Apple-style golden wallpaper — CSS gradient, no overlap with clock */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #b8a88a 0%, #d4bc96 18%, #e8d5b0 35%, #c9b48a 50%, #a89070 65%, #bfaa8a 80%, #d8c8a8 100%)' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 120% 80% at 60% 40%, rgba(220,195,155,0.6) 0%, transparent 60%), radial-gradient(ellipse 80% 60% at 20% 70%, rgba(160,135,100,0.4) 0%, transparent 50%)' }} />
-              {/* Subtle overlay for readability */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.0) 70%, rgba(0,0,0,0.2) 100%)' }} />
+              {/* Wallpaper — imagen limpia sin UI encima */}
+              <img src={lockscreenWallpaper} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              {/* Overlay suave para legibilidad del texto */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.0) 35%, rgba(0,0,0,0.0) 65%, rgba(0,0,0,0.25) 100%)' }} />
               {/* Status bar */}
               <div style={{ position: 'absolute', top: '12px', left: '20px', right: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
                 <span style={{ color: '#fff', fontSize: '10.5px', fontWeight: 600, fontFamily: 'var(--font-sans)', letterSpacing: '0.01em' }}>9:41</span>
