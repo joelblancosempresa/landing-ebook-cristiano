@@ -1033,25 +1033,7 @@ function OfferSection() {
                 </div>
               )}
 
-              {/* Free divider */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
-                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(201,169,110,0.4)', fontSize: '10px', letterSpacing: '0.18em' }}>O</span>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
-              </div>
-
-              {/* Free CTA */}
-              <button
-                onClick={() => setShowSurvey(true)}
-                style={{ display: 'block', width: '100%', background: 'transparent', color: 'rgba(201,169,110,0.85)', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '15px 24px', border: '1px solid rgba(201,169,110,0.35)', cursor: 'pointer', marginBottom: '10px', transition: 'border-color 0.2s, color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.7)'; e.currentTarget.style.color = '#c9a96e' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.35)'; e.currentTarget.style.color = 'rgba(201,169,110,0.85)' }}
-              >
-                Lo quiero gratis
-              </button>
-              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.28)', fontSize: '11px', lineHeight: 1.5, margin: 0, textAlign: 'center' }}>
-                Responde 8 preguntas breves para obtenerlo gratis
-              </p>
+              {/* TEMPORAL: free CTA oculto hasta tener PDF listo — restaurar con encuesta cuando Joel diga */}
             </div>
           </div>
         </div>
