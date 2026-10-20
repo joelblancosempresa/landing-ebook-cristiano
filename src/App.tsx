@@ -5,6 +5,7 @@ import canto from './assets/canto.png'
 import indice from './assets/indice.png'
 import primeraPagina from './assets/primera-pagina.png'
 import authorPhoto from './assets/author.webp'
+import lockscreenWallpaper from './assets/lockscreen.webp'
 import page1 from './assets/page1.webp'
 import page2 from './assets/page2.webp'
 import page3 from './assets/page3.webp'
@@ -603,10 +604,10 @@ function HeroSection() {
               position: 'absolute', inset: 0, overflow: 'hidden',
               transform: `translateY(${-lockSlide * 105}%)`,
             }}>
-              {/* Blurred portada wallpaper */}
-              <img src={portada} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(24px) brightness(0.38) saturate(1.4)', transform: 'scale(1.25)', display: 'block' }} />
-              {/* Dark overlay for iOS depth */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0.4) 100%)' }} />
+              {/* Apple-style wallpaper */}
+              <img src={lockscreenWallpaper} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              {/* Subtle overlay for readability */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.0) 70%, rgba(0,0,0,0.25) 100%)' }} />
               {/* Status bar */}
               <div style={{ position: 'absolute', top: '12px', left: '20px', right: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
                 <span style={{ color: '#fff', fontSize: '10.5px', fontWeight: 600, fontFamily: 'var(--font-sans)', letterSpacing: '0.01em' }}>9:41</span>
