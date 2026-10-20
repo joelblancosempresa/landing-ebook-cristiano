@@ -132,7 +132,7 @@ const TEXT_BLOCKS = [
   },
   {
     side: 'right' as const,
-    text: 'No estás solo en esto.\nElías pidió morirse después de su mayor victoria.\nDavid llenó los Salmos de preguntas sin respuesta.\nLos discípulos durmieron en Getsemaní.\nHabacuc le preguntó a Dios hasta cuándo iba a ignorarle.\nAsaf pensó que su fe había sido un error.',
+    text: 'No estás solo en esto.\nElías pidió morirse después de su mayor victoria.\nDavid le preguntó a Dios: "¿Me olvidarás para siempre?"\nLos discípulos le gritaron a Jesús en la tormenta: "¿No te importa?"\nHabacuc le preguntó a Dios hasta cuándo iba a clamar sin que le escuchara.\nAsaf llegó a preguntarse si Dios se había olvidado de tener misericordia.',
   },
   {
     side: 'left' as const,
@@ -142,24 +142,24 @@ const TEXT_BLOCKS = [
 
 const HOW_IT_WORKS_STEPS = [
   {
-    title: 'La Biblia como espejo',
-    text: 'Cada día empieza con alguien que ya estuvo donde estás tú. Su historia te muestra que hay salida.',
+    title: 'Lee la Palabra',
+    text: 'Cada día empieza con la Biblia: el pasaje entero, antes que cualquier opinión.',
   },
   {
-    title: 'Un versículo que se queda',
-    text: 'No para memorizarlo. Para entender qué estaba pasando cuando se escribió. Eso lo cambia todo.',
+    title: 'Entiende el contexto',
+    text: 'Qué estaba pasando cuando se escribió y qué significa para ti hoy. Sin sacarlo de su sitio.',
   },
   {
     title: 'Una conversación real',
-    text: 'Una frase incompleta. Tú pones el final. El día acaba con algo que decirle a Dios, aunque sean cinco palabras.',
+    text: 'Un paso práctico de 5 minutos y una oración que terminas con tus propias palabras.',
   },
 ]
 
 // Pop-up fact cards shown once the (single, persistent) book closes and settles
 const FACT_CARDS = [
-  { title: '21 historias reales', text: 'Personas de la Biblia que sintieron exactamente lo que sientes tú ahora.' },
-  { title: '21 versículos en contexto', text: 'No para decorar. Para entender qué estaba pasando cuando se escribieron.' },
-  { title: '21 retos concretos', text: 'Una sola cosa por día. Sin overwhelm, sin culpa.' },
+  { title: '7 días', text: 'Cinco minutos al día. Se termina de verdad.' },
+  { title: '7 pasajes de la Biblia', text: 'Escritos enteros, para que leas primero lo que dice Dios.' },
+  { title: '7 pasos prácticos', text: 'Una sola cosa por día. Sin agobios, sin culpa.' },
 ]
 
 // Day titles flipped through rapidly once the book has "entered" the phone
@@ -420,7 +420,7 @@ function HeroSection() {
             fontFamily: 'var(--font-serif)', color: '#ffffff', fontSize: 'clamp(22px, 4.5vw, 42px)',
             fontWeight: 900, lineHeight: 1.15, letterSpacing: '-0.02em', margin: 0,
           }}>
-            21 días para volver a escuchar
+            7 días para volver a escuchar
           </h1>
         </div>
         <div style={{ position: 'relative', zIndex: 6 }}>
@@ -429,8 +429,6 @@ function HeroSection() {
             fontWeight: 900, lineHeight: 1.15, letterSpacing: '-0.02em', margin: 0,
           }}>
             <em style={{ color: '#c9a96e', fontStyle: 'italic' }}>la voz de Dios</em>
-            <br />
-            como antes
           </h1>
         </div>
       </div>
@@ -461,14 +459,14 @@ function HeroSection() {
       <div style={{ position: 'absolute', top: '220vh', left: 0, right: 0, textAlign: 'center', padding: '0 24px', zIndex: 1 }}>
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.8 }}>
-            ✦ &nbsp; 21 días &nbsp; ✦
+            ✦ &nbsp; 7 días &nbsp; ✦
           </div>
           <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(20px, 3.6vw, 30px)', fontWeight: 700, lineHeight: 1.25, margin: '0 auto 12px' }}>
             No tienes que sentir la fe para volver a practicarla.
           </h2>
           <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(12px, 1.5vw, 15px)', fontWeight: 300, maxWidth: '480px', margin: '0 auto', lineHeight: 1.6 }}>
-            Un versículo que no habías leído así.<br />
-            Una historia que te va a costar olvidar.<br />
+            El pasaje de la Biblia, escrito entero.<br />
+            Qué estaba pasando cuando se escribió.<br />
             Y algo concreto que hacer ese día.<br />
             Sin sermones. Sin culpa.
           </p>
@@ -699,7 +697,7 @@ const SURVEY_QS: Array<{
   { id: 'intentos', q: '¿Qué has probado ya para\nser más constante?\nPuedes marcar varias.', type: 'multi',
     opts: ['Apps de la Biblia (YouVersion u otras)', 'Alarmas o recordatorios', 'Límites de tiempo del móvil', 'Grupos o planes de lectura', 'Nada todavía'] },
   { id: 'movil', q: '¿Qué móvil usas?', type: 'single', opts: ['iPhone', 'Android'] },
-  { id: 'cambio', q: 'Si pudieras cambiar una sola cosa\nde tu vida con Dios en 21 días,\n¿cuál sería?', type: 'text', optional: true },
+  { id: 'cambio', q: 'Si pudieras cambiar una sola cosa\nde tu vida con Dios en 7 días,\n¿cuál sería?', type: 'text', optional: true },
 ]
 const SURVEY_STEPS = SURVEY_QS.length + 1 // +1 for personal info
 
@@ -1108,10 +1106,10 @@ function AuthorSection() {
 
         {/* Footer note */}
         <div style={{ marginTop: '48px', fontFamily: 'var(--font-serif)', color: 'rgba(201,169,110,0.4)', fontSize: 'clamp(13px, 1.8vw, 16px)', fontStyle: 'italic' }}>
-          "Cercano está el Señor a los quebrantados de corazón."
+          "El Señor está cerca de los que tienen quebrantado el corazón; él rescata a los de espíritu destrozado."
         </div>
         <div style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.18)', fontSize: '10px', letterSpacing: '0.18em' }}>
-          Salmos 34:18
+          Salmos 34:18 (NTV)
         </div>
         <div style={{ marginTop: '32px', fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.13)', fontSize: '11px', fontWeight: 300 }}>
           © {new Date().getFullYear()} Joel Blanco Sierra · Todos los derechos reservados
@@ -1144,7 +1142,44 @@ export default function App() {
           behind it) which flips through pages as you keep scrolling ─── */}
       <HeroSection />
 
-      {/* ─── 6: OFFER ─── */}
+      {/* ─── 6: LOS 7 DÍAS ─── */}
+      <div style={{ background: '#000', padding: 'clamp(60px, 10vh, 100px) 24px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '560px', margin: '0 auto' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '36px', opacity: 0.8 }}>
+            ✦ &nbsp; Lo que vas a recorrer &nbsp; ✦
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            {[
+              { n: 1, title: 'Por qué Dios se siente lejos' },
+              { n: 2, title: 'Cómo habla Dios' },
+              { n: 3, title: 'Lo que ahoga la Palabra' },
+              { n: 4, title: 'Marta y María' },
+              { n: 5, title: 'Tu lugar y tu hora' },
+              { n: 6, title: 'El día que fallas' },
+              { n: 7, title: 'Sigue caminando' },
+            ].map(({ n, title }, i) => (
+              <div
+                key={n}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '20px',
+                  padding: '16px 0',
+                  borderBottom: i < 6 ? '1px solid rgba(201,169,110,0.08)' : 'none',
+                  textAlign: 'left',
+                }}
+              >
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: 'clamp(13px, 1.6vw, 15px)', fontWeight: 700, opacity: 0.7, minWidth: '36px', flexShrink: 0 }}>
+                  Día {n}
+                </span>
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 700, lineHeight: 1.3 }}>
+                  {title}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 7: OFFER ─── */}
       <OfferSection />
 
       {/* ─── AUTHOR ─── */}
