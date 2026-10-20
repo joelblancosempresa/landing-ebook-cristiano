@@ -599,35 +599,13 @@ function HeroSection() {
               <img src={portada} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block' }} />
             </div>
 
-            {/* Lock screen — slides upward to unlock */}
+            {/* Lock screen — imagen completa con todo el UI ya dentro */}
             <div style={{
               position: 'absolute', inset: 0, overflow: 'hidden',
               transform: `translateY(${-lockSlide * 105}%)`,
             }}>
-              {/* Wallpaper — imagen limpia sin UI encima */}
               <img src={lockscreenWallpaper} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              {/* Overlay suave para legibilidad del texto */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.0) 35%, rgba(0,0,0,0.0) 65%, rgba(0,0,0,0.25) 100%)' }} />
-              {/* Status bar */}
-              <div style={{ position: 'absolute', top: '12px', left: '20px', right: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
-                <span style={{ color: '#fff', fontSize: '10.5px', fontWeight: 600, fontFamily: 'var(--font-sans)', letterSpacing: '0.01em' }}>9:41</span>
-                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                  <svg width="15" height="11" viewBox="0 0 15 11" fill="white"><rect x="0" y="4" width="2.5" height="7" rx="0.8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx="0.8"/><rect x="8" y="0.5" width="2.5" height="10.5" rx="0.8"/><rect x="12" y="0.5" width="2.5" height="10.5" rx="0.8" opacity={0.3}/></svg>
-                  <svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M6.5 2C4.2 2 2.1 2.9 0.6 4.4L0 3.8C1.6 2.1 3.9 1 6.5 1s4.9 1.1 6.5 2.8l-.6.6C10.9 2.9 8.8 2 6.5 2z" fill="white" opacity={0.5}/><path d="M6.5 4.5c-1.5 0-2.9.6-3.9 1.6l-.6-.6C3.2 4.3 4.8 3.5 6.5 3.5s3.3.8 4.5 2l-.6.6c-1-1-2.4-1.6-3.9-1.6z" fill="white" opacity={0.75}/><path d="M6.5 7c-.8 0-1.5.3-2 .8l-.6-.6C4.5 6.5 5.4 6 6.5 6s2 .5 2.6 1.2l-.6.6C8 7.3 7.3 7 6.5 7z" fill="white"/><circle cx="6.5" cy="9.5" r="1" fill="white"/></svg>
-                  <svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x="0.5" y="0.5" width="20" height="10" rx="3.5" stroke="white" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="16" height="8" rx="2.5" fill="white"/><path d="M22 3.5v4a2 2 0 000-4z" fill="white" fillOpacity="0.4"/></svg>
-                </div>
-              </div>
-              {/* Time + Date */}
-              <div style={{ position: 'absolute', top: '18%', left: 0, right: 0, textAlign: 'center', zIndex: 2 }}>
-                <div style={{ color: '#fff', fontSize: 'clamp(38px, 12vw, 54px)', fontWeight: 300, lineHeight: 1, fontFamily: '-apple-system, BlinkMacSystemFont, var(--font-sans)', letterSpacing: '-0.03em', textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>9:41</div>
-                <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 'clamp(10px, 2.8vw, 12px)', marginTop: '8px', fontFamily: '-apple-system, BlinkMacSystemFont, var(--font-sans)', fontWeight: 400, letterSpacing: '0.01em' }}>
-                  Martes, 30 de septiembre
-                </div>
-              </div>
             </div>
-
-            {/* Home indicator */}
-            <div style={{ position: 'absolute', bottom: '7px', left: '50%', transform: 'translateX(-50%)', width: '90px', height: '4px', borderRadius: '3px', background: `rgba(255,255,255,${0.35 + lockSlide * 0.35})`, zIndex: 30 }} />
           </div>
 
           <div style={{ fontFamily: 'var(--font-sans)', color: '#c9a96e', fontSize: '10px', fontWeight: 300, letterSpacing: '0.42em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.8 }}>
