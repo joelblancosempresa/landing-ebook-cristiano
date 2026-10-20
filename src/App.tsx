@@ -624,46 +624,6 @@ function HeroSection() {
                   Martes, 30 de septiembre
                 </div>
               </div>
-              {/* Animated lock — center */}
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 2 }}>
-                <svg width="42" height="52" viewBox="0 0 42 52" fill="none">
-                  {/* Body */}
-                  <rect x="4" y="23" width="34" height="25" rx="7" fill="rgba(255,255,255,0.88)"/>
-                  {/* Keyhole */}
-                  <circle cx="21" cy="35.5" r="4.5" fill="rgba(0,0,0,0.38)"/>
-                  <rect x="19.2" y="35.5" width="3.6" height="6" rx="1.4" fill="rgba(0,0,0,0.38)"/>
-                  {/* Shackle — rotates open around right anchor */}
-                  <g style={{ transformOrigin: '31px 25px', transform: `rotate(${Math.min(1, swipeRaw * 6) * -68}deg)` }}>
-                    <path d="M11 25V17C11 7.5 31 7.5 31 17V25" stroke="rgba(255,255,255,0.9)" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
-                  </g>
-                </svg>
-              </div>
-              {/* iOS bottom controls */}
-              <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, zIndex: 2, opacity: Math.max(0, 1 - swipeRaw * 4) }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 24px', marginBottom: '12px' }}>
-                  {/* Flashlight */}
-                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="14" height="18" viewBox="0 0 14 18" fill="white">
-                      <path d="M4 0h6l1 6H3L4 0z" opacity={0.9}/>
-                      <path d="M3 6l1 2h6l1-2H3z" opacity={0.7}/>
-                      <rect x="4.5" y="8" width="5" height="8" rx="2.5" opacity={0.9}/>
-                      <line x1="7" y1="10" x2="7" y2="14" stroke="rgba(0,0,0,0.3)" strokeWidth="1.5"/>
-                    </svg>
-                  </div>
-                  {/* Swipe hint text */}
-                  <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '8.5px', fontFamily: 'var(--font-sans)', letterSpacing: '0.1em', textAlign: 'center' }}>
-                    DESLIZA HACIA ARRIBA
-                  </div>
-                  {/* Camera */}
-                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="18" height="15" viewBox="0 0 18 15" fill="white">
-                      <path d="M6 0l-1.5 2H1.5C0.7 2 0 2.7 0 3.5v10C0 14.3 0.7 15 1.5 15h15c0.8 0 1.5-0.7 1.5-1.5v-10C18 2.7 17.3 2 16.5 2h-3L12 0H6z" opacity={0.9}/>
-                      <circle cx="9" cy="9" r="3.5" fill="rgba(0,0,0,0.35)"/>
-                      <circle cx="9" cy="9" r="2.5" fill="rgba(255,255,255,0.2)"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Home indicator */}
