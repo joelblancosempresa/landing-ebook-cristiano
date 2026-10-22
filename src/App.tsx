@@ -592,7 +592,7 @@ function HeroSection() {
             position: 'relative', overflow: 'hidden', background: '#000', marginBottom: '32px',
           }}>
             {/* Dynamic Island */}
-            <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', width: '100px', height: '28px', borderRadius: '18px', background: '#000', zIndex: 30 }} />
+            <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', width: '72px', height: '20px', borderRadius: '12px', background: '#000', zIndex: 30 }} />
 
             {/* Portada — revealed when lock screen slides up */}
             <div style={{ position: 'absolute', inset: 0, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
