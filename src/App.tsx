@@ -519,7 +519,7 @@ function HeroSection() {
             covering it; fixed with the book, fade in and grow from small to
             full size only once it settles diagonal */}
         <div style={{ position: 'absolute', top: '12%', left: 0, right: 0, zIndex: 6, padding: '0 12px', opacity: cardsOpacity }}>
-          <div style={{ position: 'relative', width: 'min(98%, 460px)', height: 'clamp(240px, 44vh, 320px)', margin: '0 auto', transform: `scale(${cardsScale}) translateY(${cardsSlideY}px)` }}>
+          <div style={{ position: 'relative', width: 'min(340px, 92%)', height: '260px', margin: '0 auto', transform: `scale(${cardsScale}) translateY(${cardsSlideY}px)` }}>
             {FACT_CARDS.map((card, i) => (
               <div
                 key={card.title}
@@ -528,7 +528,7 @@ function HeroSection() {
                   top: `${[0, 34, 68][i]}%`,
                   left: i !== 1 ? '0%' : undefined,
                   right: i === 1 ? '0%' : undefined,
-                  width: 'clamp(108px, 34vw, 135px)',
+                  width: '118px',
                   background: '#0a0a0a', border: '1px solid rgba(201,169,110,0.3)', borderRadius: '8px',
                   padding: '10px 12px', textAlign: 'left', boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
                 }}
@@ -550,8 +550,8 @@ function HeroSection() {
           <div
             style={{
               position: 'absolute', inset: 0, margin: 'auto',
-              width: 'clamp(300px, 66vw, 460px)',
-              height: 'clamp(300px, 66vw, 460px)',
+              width: '300px',
+              height: '300px',
               borderRadius: '50%',
               background: 'radial-gradient(circle, rgba(201,169,110,0.4) 0%, rgba(201,169,110,0.14) 42%, transparent 72%)',
               filter: 'blur(50px)',
@@ -560,7 +560,7 @@ function HeroSection() {
           <div style={{ perspective: '1200px', position: 'relative' }}>
             <div
               style={{
-                width: 'clamp(190px, 48vw, 300px)',
+                width: '190px',
                 aspectRatio: '2/3',
                 transform: `scale(${bookScale}) translateX(${openT * 40}%) rotateZ(${tiltZ}deg) rotateX(${tiltX + openTiltX}deg) rotateY(${rotateY + openTiltY}deg)`,
                 transformStyle: 'preserve-3d',
@@ -586,7 +586,7 @@ function HeroSection() {
           transform: `translateY(${phoneRise * 100}vh)`,
         }}>
           <div style={{
-            width: 'clamp(200px, 44vw, 240px)', aspectRatio: '9/19.5',
+            width: '200px', aspectRatio: '9/19.5',
             border: '8px solid #111', borderRadius: '44px',
             boxShadow: '0 0 0 1px rgba(201,169,110,0.3), 0 30px 80px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.07)',
             position: 'relative', overflow: 'hidden', background: '#000', marginBottom: '32px',
