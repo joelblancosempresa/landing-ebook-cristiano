@@ -846,7 +846,7 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
               <div style={{ display: 'flex', gap: '11px', marginTop: '22px' }}>
                 <button onClick={() => animate(-1, () => setStep(s => s - 1))} style={backBtnStyle}>Atrás</button>
                 <button onClick={handleSubmit} disabled={!canContinue() || submitting} style={nextBtnStyle(canContinue() && !submitting)}>
-                  {submitting ? 'Enviando…' : 'Enviarme el devocional →'}
+                  {submitting ? 'Preparando tu acceso…' : 'Enviarme el devocional →'}
                 </button>
               </div>
             </div>
