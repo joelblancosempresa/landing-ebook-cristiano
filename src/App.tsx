@@ -794,30 +794,6 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
                 </a>
               </div>
 
-              {/* FocusGod block */}
-              <div style={{ borderTop: '1px solid rgba(201,169,110,0.12)', paddingTop: '20px', marginBottom: '16px' }}>
-                <p style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(14px, 2vw, 16px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '8px' }}>
-                  Si el móvil te gana cada mañana
-                </p>
-                <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: '13px', lineHeight: 1.6, marginBottom: '14px' }}>
-                  FocusGod bloquea Instagram y TikTok hasta que has pasado tu rato con Dios. Yo la uso cada día.
-                </p>
-                <a
-                  href="https://apps.apple.com/app/focusgod"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: 'block', background: 'transparent', border: '1px solid rgba(201,169,110,0.35)', color: 'rgba(201,169,110,0.85)', fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '14px', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}
-                >
-                  Ver FocusGod en la App Store
-                </a>
-              </div>
-
-              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px', lineHeight: 1.6, textAlign: 'center', margin: 0 }}>
-                Si no puedes descargarlo, escríbeme por privado en Instagram:{' '}
-                <a href="https://instagram.com/joelblancosierra" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(201,169,110,0.7)', textDecoration: 'none' }}>
-                  @joelblancosierra
-                </a>
-              </p>
             </div>
 
           ) : isInfoStep ? (
