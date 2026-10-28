@@ -892,24 +892,6 @@ function OfferSection() {
   }, [])
 
   const [showSurvey, setShowSurvey] = useState(false)
-  const [presaveEmail, setPresaveEmail] = useState('')
-  const [presaveStatus, setPresaveStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
-
-  const handlePresave = async () => {
-    if (!presaveEmail) return
-    setPresaveStatus('sending')
-    try {
-      await fetch(PRESAVE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'presave', email: presaveEmail }),
-      })
-      setPresaveStatus('done')
-    } catch {
-      setPresaveStatus('error')
-    }
-  }
 
   return (
     <div id="presave" ref={ref} style={{ background: '#000', position: 'relative', paddingTop: '24px', paddingBottom: '80px' }}>
@@ -953,44 +935,46 @@ function OfferSection() {
 
             {/* Right side: price + CTAs */}
             <div style={{ flex: '1 1 240px', minWidth: '220px', textAlign: 'left' }}>
-              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '20px' }}>
-                Es gratis. Solo te pido un minuto.
+              <h2 style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 700, lineHeight: 1.2, marginBottom: '8px' }}>
+                Cuando Dios se siente lejos
               </h2>
-
-              {/* Presave form — TEMPORAL hasta tener el PDF y link de pago */}
-              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.6)', fontSize: '13px', lineHeight: 1.6, marginBottom: '18px' }}>
-                Responde unas preguntas cortas sobre tu vida con Dios y te lo envío al momento. Tus respuestas me ayudan a saber qué necesitas y a hacer mejores recursos.
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.45)', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '20px' }}>
+                Devocional · 7 días
               </p>
-              {presaveStatus === 'done' ? (
-                <p style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '15px', fontStyle: 'italic', marginBottom: '20px' }}>
-                  ✓ Te avisaré en cuanto esté listo.
-                </p>
-              ) : (
-                <div style={{ marginBottom: '20px' }}>
-                  <input
-                    type="email"
-                    placeholder="Tu correo electrónico"
-                    value={presaveEmail}
-                    onChange={e => setPresaveEmail(e.target.value)}
-                    onKeyDown={e => { if (e.key === 'Enter') handlePresave() }}
-                    style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: 'rgba(245,240,232,0.05)', border: '1px solid rgba(201,169,110,0.3)', color: '#f5f0e8', fontFamily: 'var(--font-sans)', fontSize: '14px', padding: '14px 16px', marginBottom: '10px', outline: 'none' }}
-                  />
-                  <button
-                    onClick={handlePresave}
-                    disabled={!presaveEmail || presaveStatus === 'sending'}
-                    style={{ display: 'block', width: '100%', background: presaveEmail ? '#c9a96e' : 'rgba(201,169,110,0.3)', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', border: 'none', cursor: presaveEmail ? 'pointer' : 'default', transition: 'background 0.2s' }}
-                  >
-                    {presaveStatus === 'sending' ? 'Guardando…' : 'Quiero el devocional gratis →'}
-                  </button>
-                  {presaveStatus === 'error' && (
-                    <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(255,100,100,0.7)', fontSize: '12px', marginTop: '8px' }}>
-                      Algo ha fallado. Inténtalo de nuevo.
-                    </p>
-                  )}
-                </div>
-              )}
 
-              {/* TEMPORAL: free CTA oculto hasta tener PDF listo — restaurar con encuesta cuando Joel diga */}
+              {/* Precio */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '18px' }}>
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '32px', fontWeight: 700, lineHeight: 1 }}>14,99€</span>
+                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px' }}>pago único · descarga inmediata</span>
+              </div>
+
+              {/* Comprar */}
+              <a
+                href="#comprar"
+                style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', textDecoration: 'none', textAlign: 'center', marginBottom: '12px' }}
+              >
+                Quiero el mío →
+              </a>
+
+              {/* Separador */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
+                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.25)', fontSize: '10px', letterSpacing: '0.15em' }}>O</span>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
+              </div>
+
+              {/* Gratis con encuesta */}
+              <button
+                onClick={() => setShowSurvey(true)}
+                style={{ display: 'block', width: '100%', background: 'transparent', border: '1px solid rgba(201,169,110,0.3)', color: 'rgba(201,169,110,0.8)', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', padding: '14px 24px', cursor: 'pointer', transition: 'border-color 0.2s, color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.7)'; e.currentTarget.style.color = '#c9a96e' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.3)'; e.currentTarget.style.color = 'rgba(201,169,110,0.8)' }}
+              >
+                Lo quiero gratis →
+              </button>
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.3)', fontSize: '11px', lineHeight: 1.5, marginTop: '8px' }}>
+                Responde un minuto de preguntas y te lo envío al momento.
+              </p>
             </div>
           </div>
         </div>
