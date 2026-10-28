@@ -704,7 +704,7 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
 
   const inputBase: React.CSSProperties = {
     background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(201,169,110,0.25)',
-    color: '#f5f0e8', fontFamily: 'var(--font-sans)', fontSize: '14px',
+    color: '#f5f0e8', fontFamily: 'var(--font-sans)', fontSize: '16px',
     padding: '13px 16px', outline: 'none', width: '100%', boxSizing: 'border-box',
   }
 
