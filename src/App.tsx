@@ -776,6 +776,24 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
                 ↓ Descargar el devocional
               </a>
 
+              {/* Donación Ko-fi */}
+              <div style={{ borderTop: '1px solid rgba(201,169,110,0.12)', paddingTop: '20px', marginBottom: '20px', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(14px, 2vw, 16px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '6px' }}>
+                  ¿Quieres apoyar la misión?
+                </p>
+                <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: '13px', lineHeight: 1.5, marginBottom: '14px' }}>
+                  Tu aportación me permite seguir creando recursos y llegar a más personas.
+                </p>
+                <a
+                  href="https://ko-fi.com/joelblancosierra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'block', background: 'transparent', border: '1px solid rgba(201,169,110,0.5)', color: '#c9a96e', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '14px', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}
+                >
+                  ♡ &nbsp; Apoya la misión
+                </a>
+              </div>
+
               {/* FocusGod block */}
               <div style={{ borderTop: '1px solid rgba(201,169,110,0.12)', paddingTop: '20px', marginBottom: '16px' }}>
                 <p style={{ fontFamily: 'var(--font-serif)', color: '#f5f0e8', fontSize: 'clamp(14px, 2vw, 16px)', fontWeight: 700, lineHeight: 1.3, marginBottom: '8px' }}>
