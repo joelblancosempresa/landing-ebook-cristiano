@@ -648,18 +648,21 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
   const [visible, setVisible] = useState(true)
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
+  const [emailTouched, setEmailTouched] = useState(false)
   const [pais, setPais] = useState('')
   const [mayor18, setMayor18] = useState(false)
   const [consent, setConsent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
 
+  const emailValid = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+
   const q = SURVEY_QS[step]
   const isInfoStep = step === SURVEY_QS.length
 
   const canContinue = () => {
     if (done) return false
-    if (isInfoStep) return !!nombre && !!email && !!pais && mayor18 && consent
+    if (isInfoStep) return !!nombre && emailValid(email) && !!pais && mayor18 && consent
     if (!q) return false
     if (q.type === 'text' && q.optional) return true
     const a = answers[q.id]
@@ -805,8 +808,51 @@ function SurveyModal({ onClose }: { onClose: () => void }) {
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
                 <input type="text" placeholder="Tu nombre" value={nombre} onChange={e => setNombre(e.target.value)} required style={inputBase} />
-                <input type="email" placeholder="Tu correo electrónico" value={email} onChange={e => setEmail(e.target.value)} required style={inputBase} />
-                <input type="text" placeholder="Tu país" value={pais} onChange={e => setPais(e.target.value)} required style={inputBase} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <input
+                    type="email"
+                    placeholder="Tu correo electrónico"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    onBlur={() => setEmailTouched(true)}
+                    required
+                    style={{ ...inputBase, borderColor: emailTouched && email && !emailValid(email) ? 'rgba(220,80,80,0.6)' : 'rgba(201,169,110,0.25)' }}
+                  />
+                  {emailTouched && email && !emailValid(email) && (
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'rgba(220,80,80,0.9)', paddingLeft: '2px' }}>
+                      Revisa que el correo esté bien escrito
+                    </span>
+                  )}
+                </div>
+                <select value={pais} onChange={e => setPais(e.target.value)} required style={{ ...inputBase, appearance: 'none', WebkitAppearance: 'none', color: pais ? '#f5f0e8' : 'rgba(245,240,232,0.4)' }}>
+                  <option value="" disabled>Tu país</option>
+                  <option value="España">España</option>
+                  <optgroup label="──────────">
+                    <option value="Argentina">Argentina</option>
+                    <option value="Bolivia">Bolivia</option>
+                    <option value="Chile">Chile</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Costa Rica">Costa Rica</option>
+                    <option value="Cuba">Cuba</option>
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="El Salvador">El Salvador</option>
+                    <option value="Guatemala">Guatemala</option>
+                    <option value="Honduras">Honduras</option>
+                    <option value="México">México</option>
+                    <option value="Nicaragua">Nicaragua</option>
+                    <option value="Panamá">Panamá</option>
+                    <option value="Paraguay">Paraguay</option>
+                    <option value="Perú">Perú</option>
+                    <option value="Puerto Rico">Puerto Rico</option>
+                    <option value="República Dominicana">República Dominicana</option>
+                    <option value="Uruguay">Uruguay</option>
+                    <option value="Venezuela">Venezuela</option>
+                    <option value="Estados Unidos">Estados Unidos</option>
+                  </optgroup>
+                  <optgroup label="──────────">
+                    <option value="Otro">Otro</option>
+                  </optgroup>
+                </select>
                 {[
                   { v: mayor18, set: setMayor18, label: 'Confirmo que soy mayor de 18 años.' },
                   { v: consent, set: setConsent, label: 'Acepto que se guarden mis respuestas, incluidas las que hablan de mi fe, y mi correo para enviarme el devocional y contenido relacionado. Puedo darme de baja cuando quiera.' },
