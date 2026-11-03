@@ -990,8 +990,8 @@ function OfferSection() {
 
               {/* Comprar */}
               <a
-                href="https://buy.stripe.com/28E14naWu5tC5313hQffy00"
-                target="_blank"
+                href="https://blancojewel.gumroad.com/l/cfslq"
+                data-gumroad-overlay-checkout="true"
                 rel="noopener noreferrer"
                 style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', textDecoration: 'none', textAlign: 'center', marginBottom: '12px' }}
               >
