@@ -984,7 +984,7 @@ function OfferSection() {
 
               {/* Precio */}
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '18px' }}>
-                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '32px', fontWeight: 700, lineHeight: 1 }}>$14.99</span>
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '32px', fontWeight: 700, lineHeight: 1 }}>$9.99</span>
                 <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px' }}>pago único · descarga inmediata</span>
               </div>
 
