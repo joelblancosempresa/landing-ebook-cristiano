@@ -86,7 +86,7 @@ function Book3D({ openT = 0 }: { openT?: number }) {
         style={{
           position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
           transformOrigin: '0% 50%',
-          transform: `rotateY(${-openT * 160}deg) translateZ(${half}px)`,
+          transform: `translateZ(${half}px) rotateY(${-openT * 160}deg)`,
         }}
       >
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
@@ -392,7 +392,7 @@ function HeroSection() {
   // below it that needs the room — but once that copy has cleared and it's
   // just the book shrinking away, it re-centers vertically instead of
   // staying stranded near the top with dead space below.
-  const stageMarginVh = lerp(13, 22, windowT(progress, lerp(CARDS_GONE, PHONE_ENTER_END, 0.6), PHONE_ENTER_END))
+  const stageMarginVh = lerp(19, 22, windowT(progress, lerp(CARDS_GONE, PHONE_ENTER_END, 0.6), PHONE_ENTER_END))
 
   // Once inside the phone, scrolling flips rapidly through a few day pages —
   // an actual page turning (rotateY, hinged at the left edge like a book),
