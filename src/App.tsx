@@ -144,23 +144,23 @@ const TEXT_BLOCKS = [
 const HOW_IT_WORKS_STEPS = [
   {
     title: 'Lee',
-    text: 'Cada día empieza con un pasaje de la Biblia. Lo lees primero, antes de cualquier explicación.',
+    text: 'Cada día empieza con unos versículos de la Biblia.',
   },
   {
     title: 'Entiende',
-    text: 'Te cuento qué estaba pasando cuando se escribió y qué tiene que ver con tu vida hoy.',
+    text: 'Te explico qué pasaba entonces y por qué te habla a ti hoy.',
   },
   {
     title: 'Haz y ora',
-    text: 'Acabas con algo sencillo para poner en práctica ese día y una oración corta.',
+    text: 'Una cosa pequeña para ese día y una oración para cerrar.',
   },
 ]
 
 // Pop-up fact cards shown once the (single, persistent) book closes and settles
 const FACT_CARDS = [
-  { title: '5 minutos', text: 'Lo que tardas en tomarte un café.' },
-  { title: '7 pasajes', text: 'De los Evangelios y los Salmos.' },
-  { title: 'Gratis', text: 'Solo te pido que respondas unas preguntas.' },
+  { title: '5 minutos', text: 'Cabe en cualquier mañana.' },
+  { title: '7 días', text: 'Una semana para volver a acercarte a Dios.' },
+  { title: 'En tu móvil', text: 'Lo lees donde quieras, en PDF.' },
 ]
 
 // Day titles flipped through rapidly once the book has "entered" the phone
