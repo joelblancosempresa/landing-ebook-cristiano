@@ -137,7 +137,7 @@ const TEXT_BLOCKS = [
   },
   {
     side: 'left' as const,
-    text: 'La Biblia no esconde esta parte. Y tampoco te deja ahí.',
+    text: 'La Biblia habla de esto. Y también de cómo volver.',
   },
 ]
 
@@ -469,8 +469,8 @@ function HeroSection() {
             No tienes que sentir la fe para volver a practicarla.
           </h2>
           <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.5)', fontSize: 'clamp(12px, 1.5vw, 15px)', fontWeight: 300, maxWidth: '480px', margin: '0 auto', lineHeight: 1.6 }}>
-            Cada día lees un pasaje de la Biblia, entiendes qué estaba pasando cuando se escribió y haces una sola cosa ese mismo día.<br />
-            Cinco minutos. Sin sermones y sin culpa.
+            Cada día lees unos versículos de la Biblia, entiendes qué estaba pasando cuando se escribió y haces una sola cosa ese mismo día.<br />
+            Son cinco minutos al día.
           </p>
         </div>
       </div>
@@ -612,7 +612,7 @@ function HeroSection() {
             ✦ &nbsp; Formato PDF &nbsp; ✦
           </div>
           <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.55)', fontSize: 'clamp(13px, 1.6vw, 17px)', fontWeight: 300, maxWidth: '480px', margin: '0 auto', lineHeight: 1.6 }}>
-            Léelo desde tu móvil, en cualquier momento y lugar
+            Lo lees en el móvil, cuando te venga bien
           </p>
         </div>
       </div>
@@ -1015,7 +1015,7 @@ function OfferSection() {
                 Lo quiero gratis →
               </button>
               <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.3)', fontSize: '11px', lineHeight: 1.5, marginTop: '8px' }}>
-                Responde un minuto de preguntas y te lo envío al momento.
+                Respondes unas preguntas rápidas y te lo envío al momento.
               </p>
             </div>
           </div>
@@ -1081,7 +1081,7 @@ function AuthorSection() {
           <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(245,240,232,0.55)', fontSize: 'clamp(14px, 1.5vw, 16px)', lineHeight: 1.9, fontStyle: 'italic', maxWidth: '480px', margin: '0 auto', textAlign: 'left' }}>
             Escribí esto para ti.<br /><br />
             Si un día oraste con ganas y ahora te cuesta, o si nunca has sentido a Dios cerca y te gustaría, este devocional es para ti.<br /><br />
-            No vas a encontrar fórmulas. Vas a encontrar la Biblia: lo que dice cuando Dios se siente lejos y por dónde empezar a volver.<br /><br />
+            Aquí no hay fórmulas, solo la Biblia: lo que dice cuando Dios se siente lejos y por dónde empezar a volver.<br /><br />
             Yo empiezo cada mañana con mi rato con Dios antes de abrir ninguna red social. Es lo que te propongo durante estos 7 días.
           </p>
           <p style={{ fontFamily: 'var(--font-serif)', color: 'rgba(201,169,110,0.7)', fontSize: 'clamp(14px, 1.5vw, 16px)', marginTop: '24px', fontStyle: 'italic' }}>
@@ -1137,7 +1137,7 @@ export default function App() {
             {[
               { n: 1, title: 'Por qué Dios se siente lejos', desc: 'La Biblia da más de una razón. Aprende a distinguirlas.' },
               { n: 2, title: 'Cómo habla Dios', desc: 'Un método sencillo para escucharle en su Palabra. Lo usarás el resto de días.' },
-              { n: 3, title: 'Lo que ahoga la Palabra', desc: 'Jesús lo explicó en una parábola. Hoy le pones número a tu ruido.' },
+              { n: 3, title: 'Lo que ahoga la Palabra', desc: 'Jesús lo explicó en una parábola. Hoy ves qué es lo que te distrae a ti.' },
               { n: 4, title: 'Marta y María', desc: 'Estar ocupado con cosas buenas también puede dejarte sin escuchar.' },
               { n: 5, title: 'Tu lugar y tu hora', desc: 'Jesús dijo "cierra la puerta". Hoy decides cuál es la tuya.' },
               { n: 6, title: 'El día que fallas', desc: 'Qué hacer cuando la fuerza de voluntad no basta.' },
