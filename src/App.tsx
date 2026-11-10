@@ -25,7 +25,7 @@ const PRESAVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBaI_X_uyEG
 // centered ON the box's left/right boundary (not flush outside it) and spun
 // around their OWN center — so after rotating they land at that same ±D/2
 // span instead of drifting off by D/2, which is what caused the gaps.
-const BOOK_DEPTH = 4 // px
+const BOOK_DEPTH = 14 // px
 
 // Capped well short of fully open (1) — just enough for the cover to swing
 // clear of the índice on the right page, with the left page barely cracked.
