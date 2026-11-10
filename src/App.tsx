@@ -26,6 +26,7 @@ const PRESAVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBaI_X_uyEG
 // around their OWN center — so after rotating they land at that same ±D/2
 // span instead of drifting off by D/2, which is what caused the gaps.
 const BOOK_DEPTH = 14 // px
+const LEFT_STACK = 6 // px — paper thickness on the opened front flap
 
 // Capped well short of fully open (1) — just enough for the cover to swing
 // clear of the índice on the right page, with the left page barely cracked.
@@ -44,6 +45,7 @@ const PAGE_EDGE_BG =
 // size), only the calendar's own share of the page width grows; índice
 // takes what's left. The book's overall width is unchanged, the two pages
 // are just no longer an even split.
+const PAGE_COLOR = '#f6f2e9'
 const CALENDAR_WIDTH = '78%'
 const INDICE_WIDTH = '22%'
 
@@ -51,8 +53,9 @@ const INDICE_WIDTH = '22%'
 // butcher the title.
 const CALENDAR_FACE_STYLE = {
   width: CALENDAR_WIDTH, height: '100%',
-  backgroundImage: `url(${primeraPagina})`, backgroundSize: 'cover' as const,
-  backgroundPosition: 'center',
+  backgroundImage: `url(${primeraPagina})`, backgroundSize: 'contain' as const,
+  backgroundPosition: 'center', backgroundRepeat: 'no-repeat' as const,
+  backgroundColor: PAGE_COLOR,
 }
 
 // índice's own box shrank to make room for the wider calendar (above), and
@@ -63,7 +66,7 @@ const INDICE_FACE_STYLE = {
   width: INDICE_WIDTH, height: '100%',
   backgroundImage: `url(${indice})`, backgroundSize: 'contain' as const,
   backgroundPosition: 'center', backgroundRepeat: 'no-repeat' as const,
-  backgroundColor: '#ffffff',
+  backgroundColor: PAGE_COLOR,
 }
 
 // `openT` (0–1) hinges the front cover open around the spine (left edge),
@@ -92,7 +95,9 @@ function Book3D({ openT = 0 }: { openT?: number }) {
         <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', overflow: 'hidden' }}>
           <img src={portada} alt="Portada: Cuando Dios se siente lejos" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, transform: 'rotateY(180deg)', backfaceVisibility: 'hidden', ...CALENDAR_FACE_STYLE, width: '100%' }} />
+        <div style={{ position: 'absolute', inset: 0, transform: `translateZ(${-LEFT_STACK}px) rotateY(180deg)`, backfaceVisibility: 'hidden', ...CALENDAR_FACE_STYLE, width: '100%' }} />
+        {/* Paper edge on the open flap so the left half has thickness too */}
+        <div style={{ position: 'absolute', top: 0, left: `calc(100% - ${LEFT_STACK / 2}px)`, width: `${LEFT_STACK}px`, height: '100%', transform: `translateZ(${-LEFT_STACK / 2}px) rotateY(90deg)`, background: PAGE_EDGE_BG }} />
       </div>
 
       {/* Back cover */}
