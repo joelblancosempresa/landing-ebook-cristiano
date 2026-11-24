@@ -987,10 +987,19 @@ function OfferSection() {
                 Devocional · 7 días
               </p>
 
+              {/* Lo que te llevas */}
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 18px', fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.75)', fontSize: '13px', lineHeight: 1.5 }}>
+                {['7 días de devocional, 55 páginas', 'Un método sencillo para escuchar a Dios en la Biblia', 'Un plan para seguir después del día 7'].map(t => (
+                  <li key={t} style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                    <span style={{ color: '#c9a96e' }}>✓</span>{t}
+                  </li>
+                ))}
+              </ul>
+
               {/* Precio: tachado + gratis */}
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '18px' }}>
-                <span style={{ fontFamily: 'var(--font-serif)', color: 'rgba(245,240,232,0.35)', fontSize: '22px', textDecoration: 'line-through', lineHeight: 1 }}>$9.99</span>
-                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '34px', fontWeight: 700, lineHeight: 1 }}>Gratis</span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', marginBottom: '18px' }}>
+                <span style={{ fontFamily: 'var(--font-serif)', color: 'rgba(245,240,232,0.5)', fontSize: '34px', fontWeight: 700, textDecoration: 'line-through', textDecorationColor: '#c9a96e', lineHeight: 1 }}>$9.99</span>
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '38px', fontWeight: 700, lineHeight: 1 }}>Gratis</span>
               </div>
 
               {/* Gratis con encuesta */}
@@ -1000,16 +1009,21 @@ function OfferSection() {
               >
                 Lo quiero gratis →
               </button>
-              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.45)', fontSize: '12px', lineHeight: 1.5, marginTop: '10px', textAlign: 'center' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.45)', fontSize: '12px', lineHeight: 1.5, margin: '8px 0 16px', textAlign: 'center' }}>
                 8 preguntas · 1 minuto · te lo envío al momento
               </p>
 
               {/* Pago, para quien quiera apoyar */}
-              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.3)', fontSize: '11px', lineHeight: 1.5, marginTop: '22px', textAlign: 'center' }}>
-                ¿Prefieres apoyarme?{' '}
-                <a href="https://buy.stripe.com/28E14naWu5tC5313hQffy00" target="_blank" rel="noopener noreferrer" style={{ color: '#c9a96e', textDecoration: 'underline' }}>
-                  Cómpralo por $9.99
-                </a>
+              <a
+                href="https://buy.stripe.com/28E14naWu5tC5313hQffy00"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'block', width: '100%', boxSizing: 'border-box', border: '1px solid rgba(201,169,110,0.5)', color: '#c9a96e', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '15px 24px', textDecoration: 'none', textAlign: 'center' }}
+              >
+                Comprarlo por $9.99
+              </a>
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.45)', fontSize: '12px', lineHeight: 1.5, marginTop: '8px', textAlign: 'center' }}>
+                Sin preguntas · descarga inmediata · me ayudas a seguir escribiendo
               </p>
             </div>
           </div>
