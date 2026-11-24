@@ -987,40 +987,29 @@ function OfferSection() {
                 Devocional · 7 días
               </p>
 
-              {/* Precio */}
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '18px' }}>
-                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '32px', fontWeight: 700, lineHeight: 1 }}>$9.99</span>
-                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.35)', fontSize: '12px' }}>pago único · descarga inmediata</span>
-              </div>
-
-              {/* Comprar */}
-              <a
-                href="https://buy.stripe.com/28E14naWu5tC5313hQffy00"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', textDecoration: 'none', textAlign: 'center', marginBottom: '12px' }}
-              >
-                Quiero el mío →
-              </a>
-
-              {/* Separador */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
-                <span style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.25)', fontSize: '10px', letterSpacing: '0.15em' }}>O</span>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(201,169,110,0.15)' }} />
+              {/* Precio: tachado + gratis */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '18px' }}>
+                <span style={{ fontFamily: 'var(--font-serif)', color: 'rgba(245,240,232,0.35)', fontSize: '22px', textDecoration: 'line-through', lineHeight: 1 }}>$9.99</span>
+                <span style={{ fontFamily: 'var(--font-serif)', color: '#c9a96e', fontSize: '34px', fontWeight: 700, lineHeight: 1 }}>Gratis</span>
               </div>
 
               {/* Gratis con encuesta */}
               <button
                 onClick={() => setShowSurvey(true)}
-                style={{ display: 'block', width: '100%', background: 'transparent', border: '1px solid rgba(201,169,110,0.3)', color: 'rgba(201,169,110,0.8)', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', padding: '14px 24px', cursor: 'pointer', transition: 'border-color 0.2s, color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.7)'; e.currentTarget.style.color = '#c9a96e' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(201,169,110,0.3)'; e.currentTarget.style.color = 'rgba(201,169,110,0.8)' }}
+                style={{ display: 'block', width: '100%', border: 'none', background: '#c9a96e', color: '#000', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '18px 24px', cursor: 'pointer' }}
               >
                 Lo quiero gratis →
               </button>
-              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.3)', fontSize: '11px', lineHeight: 1.5, marginTop: '8px' }}>
-                Respondes unas preguntas rápidas y te lo envío al momento.
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.45)', fontSize: '12px', lineHeight: 1.5, marginTop: '10px', textAlign: 'center' }}>
+                8 preguntas · 1 minuto · te lo envío al momento
+              </p>
+
+              {/* Pago, para quien quiera apoyar */}
+              <p style={{ fontFamily: 'var(--font-sans)', color: 'rgba(245,240,232,0.3)', fontSize: '11px', lineHeight: 1.5, marginTop: '22px', textAlign: 'center' }}>
+                ¿Prefieres apoyarme?{' '}
+                <a href="https://buy.stripe.com/28E14naWu5tC5313hQffy00" target="_blank" rel="noopener noreferrer" style={{ color: '#c9a96e', textDecoration: 'underline' }}>
+                  Cómpralo por $9.99
+                </a>
               </p>
             </div>
           </div>
